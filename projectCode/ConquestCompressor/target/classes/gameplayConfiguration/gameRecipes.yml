@@ -1,0 +1,103 @@
+# ===================================================
+# 🧾 Game Crafting Recipes - gameRecipes.yml
+# Custom shapeless/shaped crafting recipes for ConquestCompressor.
+# Can be used to override vanilla recipes or add new ones.
+# Reloadable via /conquestcompressor reload
+# ===================================================
+
+# ===================================================
+# 🧩 Recipe Format
+# Each recipe defines a 3x3 crafting layout.
+#
+# ENABLED: Toggle the recipe on/off
+# LAYOUT: 9 crafting slots (CraftingSlot1 to CraftingSlot9)
+# GIVEN: Resulting item with material, amount, and optional metadata
+#
+# You can add as many recipes as needed under `recipes:`
+# ===================================================
+
+recipes:
+
+  # 🧱 DIRT ➜ STONE (Test Recipe)
+  recipe1:
+    enabled: true
+    layout:
+      CraftingSlot1:
+        material: DIRT
+        itemData: [ ]
+      CraftingSlot2:
+        material: DIRT
+        itemData: [ ]
+      CraftingSlot3:
+        material: DIRT
+        itemData: [ ]
+      CraftingSlot4:
+        material: DIRT
+        itemData: [ ]
+      CraftingSlot5:
+        material: DIRT
+        itemData: [ ]
+      CraftingSlot6:
+        material: DIRT
+        itemData: [ ]
+      CraftingSlot7:
+        material: DIRT
+        itemData: [ ]
+      CraftingSlot8:
+        material: DIRT
+        itemData: [ ]
+      CraftingSlot9:
+        material: DIRT
+        itemData: [ ]
+    given:
+      material: STONE
+      amount: 1
+      itemData: [ ]
+
+  # 💎 DIAMONDS ➜ DIAMOND BLOCK
+  recipe2:
+    enabled: true
+    layout:
+      CraftingSlot1:
+        material: DIAMOND
+        itemData: [ ]
+      CraftingSlot2:
+        material: DIAMOND
+        itemData: [ ]
+      CraftingSlot3:
+        material: DIAMOND
+        itemData: [ ]
+      CraftingSlot4:
+        material: DIAMOND
+        itemData: [ ]
+      CraftingSlot5:
+        material: DIAMOND
+        itemData: [ ]
+      CraftingSlot6:
+        material: DIAMOND
+        itemData: [ ]
+      CraftingSlot7:
+        material: DIAMOND
+        itemData: [ ]
+      CraftingSlot8:
+        material: DIAMOND
+        itemData: [ ]
+      CraftingSlot9:
+        material: DIAMOND
+        itemData: [ ]
+    given:
+      material: DIAMOND_BLOCK
+      amount: 1
+      itemData: [ ]
+
+# ===================================================
+# 🛠️ Tips for Expansion
+# - You can use any Bukkit Material as input or output.
+# - itemData supports advanced customization like:
+#   - customModelData
+#   - displayName (MiniMessage)
+#   - lore
+# - This file is ideal for GUI integration or quest-based rewards.
+# ===================================================
+
+# End of gameRecipes.yml

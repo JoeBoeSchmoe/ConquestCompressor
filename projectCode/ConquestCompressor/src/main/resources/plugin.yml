@@ -6,7 +6,7 @@
 
 name: ConquestCompressor
 version: 1.0.0
-main: org.conquest.conquestcompressor.ConquestCompressor
+main: org.conquest.conquestCompressor.ConquestCompressor
 api-version: 1.21
 author: Conquest Coder
 description: >

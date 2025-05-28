@@ -1,0 +1,50 @@
+# ===================================================
+# 🔁 Game Auto Compressor Recipes - gameAutoCompressor.yml
+# Defines automatic inventory-based compression recipes.
+# These trigger when players have required items in inventory.
+# Controlled by flags and values defined below.
+# ===================================================
+
+# ===================================================
+# 🧱 Compression Recipes
+# Each block defines a transformation recipe.
+# ---------------------------------------------------
+# enabled: Toggle the recipe on/off
+# hasItems: Required item(s) and amount
+# giveItems: Output item(s) granted to player
+# ===================================================
+
+compressions:
+
+  # 🪨 Cobblestone ➜ Compressed Stone
+  cobblestone_to_compressed_stone:
+    enabled: true
+    hasItems:
+      material: COBBLESTONE
+      amount: 9
+      itemData: [ ]
+    giveItems:
+      material: STONE
+      amount: 1
+      itemData: [ ]
+
+  # 🧱 Stone ➜ Compressed Coal Ore
+  stone_to_compressed_coal_ore:
+    enabled: true
+    hasItems:
+      material: STONE
+      amount: 9
+      itemData: [ ]
+    giveItems:
+      material: COAL_ORE
+      amount: 1
+      itemData: [ ]
+
+# ===================================================
+# 🛠️ Future Expansion Ideas (Commented)
+# - Add customModelData for visual distinction
+# - Allow multi-input/multi-output
+# - Add display names/lore via MiniMessage
+# ===================================================
+
+# End of gameAutoCompressor.yml
