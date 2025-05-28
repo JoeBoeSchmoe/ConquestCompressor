@@ -1,0 +1,60 @@
+# ===================================================
+# 🏰 ConquestCompressor - plugin.yml
+# Metadata, command routing, and permission control.
+# Required by Paper/Bukkit for loading the plugin.
+# ===================================================
+
+name: ConquestCompressor
+version: 1.0.0
+main: org.conquest.conquestcompressor.ConquestCompressor
+api-version: 1.21
+author: Conquest Coder
+description: >
+  A utility plugin that optimizes spawner functionality and performance
+  through smart compression logic. Includes admin commands and full config support.
+
+# Hard Dependencies
+depend:
+  - Vault
+
+# Optional Dependencies
+softdepend:
+  - PlaceholderAPI
+
+# ===================================================
+# 🧭 Commands
+# Commands registered in CommandManager.java
+# Aliases are handled dynamically via config.yml too.
+# ===================================================
+commands:
+  conquestcompressor:
+    description: Root command for ConquestCompressor features.
+    usage: /<command>
+    aliases: [ccompressor, compressor]
+    permission: conquestcompressor.admin.basecommand
+
+# ===================================================
+# 🔐 Permissions
+# Grouped for clean control and future modular expansions.
+# Compatible with LuckPerms, etc.
+# ===================================================
+permissions:
+  conquestcompressor.admin.basecommand:
+    description: Access to /conquestcompressor and its subcommands
+    default: true
+
+  conquestcompressor.admin.help:
+    description: View help menu for compressor features
+    default: true
+
+  conquestcompressor.admin.reload:
+    description: Reload the plugin's configuration files
+    default: op
+
+  conquestcompressor.admin.*:
+    description: Grants full access to all ConquestCompressor admin commands
+    default: op
+    children:
+      conquestcompressor.admin.basecommand: true
+      conquestcompressor.admin.help: true
+      conquestcompressor.admin.reload: true

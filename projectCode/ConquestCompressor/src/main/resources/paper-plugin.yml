@@ -1,6 +1,0 @@
-name: ConquestCompressor
-version: '1.0'
-main: org.conquest.conquestCompressor.ConquestCompressor
-api-version: '1.21'
-authors: [ Conquest Coder ]
-description: A plugin for creating a performance friendly but interactive spawner plugin
