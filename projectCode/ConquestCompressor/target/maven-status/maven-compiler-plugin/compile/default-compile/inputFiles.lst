@@ -6,6 +6,8 @@ C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCod
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\commandHandler\subcommandHandler\UserCommands.java
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\configurationHandler\configurationFiles\AdminMessagesFile.java
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\configurationHandler\configurationFiles\ConfigFile.java
+C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\configurationHandler\configurationFiles\GameAutocompressorFile.java
+C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\configurationHandler\configurationFiles\GameRecipesFile.java
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\configurationHandler\configurationFiles\UserMessagesFile.java
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\configurationHandler\ConfigurationManager.java
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\configurationHandler\integrationFiles\PlaceHolderAPIManager.java
@@ -14,6 +16,12 @@ C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCod
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\cooldownHandler\CommandCooldownManager.java
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\cooldownHandler\GUICooldownManager.java
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\cooldownHandler\InteractionCooldownManager.java
+C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\functionalHandler\compressorHandler\CompressorManager.java
+C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\functionalHandler\compressorHandler\CompressorModel.java
+C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\functionalHandler\EnchantmentDataModel.java
+C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\functionalHandler\ItemDataModel.java
+C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\functionalHandler\recipeHandler\RecipeManager.java
+C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\functionalHandler\recipeHandler\RecipeModel.java
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\responseHandler\ComponentSerializerManager.java
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\responseHandler\effectHandler\ActionBarResponseManager.java
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\responseHandler\effectHandler\BossBarResponseManager.java

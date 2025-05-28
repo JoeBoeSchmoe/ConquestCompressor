@@ -56,9 +56,10 @@ placeholders:
 # Controls how often players can trigger compression actions.
 # ===================================================
 cooldowns:
-  command-delay-ms: 500             # Delay between command executions
-  gui-action-cooldown-ms: 150       # Delay between GUI item clicks
-  compression-action-cooldown-ms: 3000 # Delay between compress/decompress actions
+  command-delay-ms: 500                 # Delay between command executions
+  gui-action-cooldown-ms: 150           # Delay between GUI item clicks
+  compression-action-cooldown-ms: 3000  # Delay between compress/decompress actions
+  interaction-cooldown-ms: 750          # Delay between interaction actions
 
 # ===================================================
 # 🕒 GUI Timeout

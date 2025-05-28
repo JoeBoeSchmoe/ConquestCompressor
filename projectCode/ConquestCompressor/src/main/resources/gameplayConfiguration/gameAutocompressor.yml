@@ -5,15 +5,6 @@
 # Controlled by flags and values defined below.
 # ===================================================
 
-# ===================================================
-# 🧱 Compression Recipes
-# Each block defines a transformation recipe.
-# ---------------------------------------------------
-# enabled: Toggle the recipe on/off
-# hasItems: Required item(s) and amount
-# giveItems: Output item(s) granted to player
-# ===================================================
-
 compressions:
 
   # 🪨 Cobblestone ➜ Compressed Stone
@@ -22,11 +13,33 @@ compressions:
     hasItems:
       material: COBBLESTONE
       amount: 9
-      itemData: [ ]
+      itemData:
+        - displayName: "<gray><bold>Refined Cobblestone"
+          lore:
+            - "<gray>Once a humble stone..."
+            - "<yellow>Now it seeks compression glory."
+          customModelData: 101
+          unbreakable: true
+          enchantments:
+            - name: efficiency
+              level: 2
+            - name: unbreaking
+              level: 1
+          nbt:
+            is_compressible: true
+            origin: "stone_age"
     giveItems:
       material: STONE
       amount: 1
-      itemData: [ ]
+      itemData:
+        - displayName: "<white><bold>Compressed Stone"
+          lore:
+            - "<gray>Pressed and hardened by science."
+          customModelData: 102
+          unbreakable: false
+          enchantments: [ ]
+          nbt:
+            compressed_by: "auto-system"
 
   # 🧱 Stone ➜ Compressed Coal Ore
   stone_to_compressed_coal_ore:
@@ -38,7 +51,17 @@ compressions:
     giveItems:
       material: COAL_ORE
       amount: 1
-      itemData: [ ]
+      itemData:
+        - displayName: "<dark_gray>Compressed Coal Block"
+          lore:
+            - "<gray>So dark, so dense."
+          customModelData: 103
+          unbreakable: true
+          enchantments:
+            - name: fortune
+              level: 3
+          nbt:
+            custom_flag: true
 
 # ===================================================
 # 🛠️ Future Expansion Ideas (Commented)

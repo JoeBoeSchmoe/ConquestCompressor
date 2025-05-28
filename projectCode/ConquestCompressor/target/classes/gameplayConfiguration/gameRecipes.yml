@@ -5,17 +5,6 @@
 # Reloadable via /conquestcompressor reload
 # ===================================================
 
-# ===================================================
-# 🧩 Recipe Format
-# Each recipe defines a 3x3 crafting layout.
-#
-# ENABLED: Toggle the recipe on/off
-# LAYOUT: 9 crafting slots (CraftingSlot1 to CraftingSlot9)
-# GIVEN: Resulting item with material, amount, and optional metadata
-#
-# You can add as many recipes as needed under `recipes:`
-# ===================================================
-
 recipes:
 
   # 🧱 DIRT ➜ STONE (Test Recipe)
@@ -24,7 +13,17 @@ recipes:
     layout:
       CraftingSlot1:
         material: DIRT
-        itemData: [ ]
+        itemData:
+          - displayName: "<gray>Dirt of Destiny"
+            lore:
+              - "<dark_gray>Holds the secrets of the soil"
+            customModelData: 201
+            unbreakable: false
+            enchantments:
+              - name: unbreaking
+                level: 1
+            nbt:
+              soil_type: "enchanted"
       CraftingSlot2:
         material: DIRT
         itemData: [ ]
@@ -52,7 +51,17 @@ recipes:
     given:
       material: STONE
       amount: 1
-      itemData: [ ]
+      itemData:
+        - displayName: "<white><bold>Compacted Stone"
+          lore:
+            - "<gray>Stone made from pure pressure."
+          customModelData: 202
+          unbreakable: true
+          enchantments:
+            - name: efficiency
+              level: 2
+          nbt:
+            forged_from: "dirt"
 
   # 💎 DIAMONDS ➜ DIAMOND BLOCK
   recipe2:
@@ -60,7 +69,17 @@ recipes:
     layout:
       CraftingSlot1:
         material: DIAMOND
-        itemData: [ ]
+        itemData:
+          - customModelData: 301
+            displayName: "<aqua>Refined Diamond"
+            lore:
+              - "<gray>Polished to perfection"
+            enchantments:
+              - name: sharpness
+                level: 1
+            unbreakable: false
+            nbt:
+              is_shiny: true
       CraftingSlot2:
         material: DIAMOND
         itemData: [ ]
@@ -88,7 +107,17 @@ recipes:
     given:
       material: DIAMOND_BLOCK
       amount: 1
-      itemData: [ ]
+      itemData:
+        - displayName: "<bold><blue>Block of Mastery"
+          lore:
+            - "<gray>Formed from pure brilliance."
+          customModelData: 305
+          enchantments:
+            - name: luck
+              level: 5
+          nbt:
+            origin: "vault_of_legends"
+            tier: "legendary"
 
 # ===================================================
 # 🛠️ Tips for Expansion

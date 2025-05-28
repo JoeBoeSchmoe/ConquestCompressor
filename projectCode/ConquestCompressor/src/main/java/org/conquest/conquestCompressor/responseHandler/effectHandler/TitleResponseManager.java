@@ -57,12 +57,12 @@ public class TitleResponseManager {
                     )
             ));
 
-            ConquestCompressor.getInstance().getLogger().info(
-                    "[Title] Sent to " + player.getName() +
-                            " | Title: " + rawTitle +
-                            " | Subtitle: " + rawSubtitle +
-                            " | Timings: fadeIn=" + fadeIn + ", stay=" + stay + ", fadeOut=" + fadeOut
-            );
+//            ConquestCompressor.getInstance().getLogger().info(
+//                    "[Title] Sent to " + player.getName() +
+//                            " | Title: " + rawTitle +
+//                            " | Subtitle: " + rawSubtitle +
+//                            " | Timings: fadeIn=" + fadeIn + ", stay=" + stay + ", fadeOut=" + fadeOut
+//            );
         }
     }
 

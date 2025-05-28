@@ -2,9 +2,7 @@ package org.conquest.conquestCompressor.configurationHandler;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.conquest.conquestCompressor.ConquestCompressor;
-import org.conquest.conquestCompressor.configurationHandler.configurationFiles.AdminMessagesFile;
-import org.conquest.conquestCompressor.configurationHandler.configurationFiles.ConfigFile;
-import org.conquest.conquestCompressor.configurationHandler.configurationFiles.UserMessagesFile;
+import org.conquest.conquestCompressor.configurationHandler.configurationFiles.*;
 import org.conquest.conquestCompressor.configurationHandler.integrationFiles.PlaceHolderAPIManager;
 import org.conquest.conquestCompressor.configurationHandler.integrationFiles.VaultManager;
 
@@ -32,6 +30,8 @@ public class ConfigurationManager {
             ConfigFile.load();
             AdminMessagesFile.load();
             UserMessagesFile.load();
+            GameRecipesFile.load();
+            GameAutocompressorFile.load();
 
             this.config = ConfigFile.getConfig();
 
