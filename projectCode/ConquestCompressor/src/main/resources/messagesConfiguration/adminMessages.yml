@@ -1,0 +1,133 @@
+# =========================================================
+# 💬 ConquestCompressor - adminMessages.yml
+# Admin-facing messages for command usage, errors, and results.
+# Fully MiniMessage-compatible with hover, click, sounds, particles, effects.
+# =========================================================
+
+# =========================================================
+# 📘 Message Format Reference
+# ---------------------------------------------------------
+# text:         [MiniMessage lines shown in chat]
+# hover:        Text to show when hovered (MiniMessage-supported)
+# click:        Command or URL to run/suggest when clicked
+# clickType:    RUN_COMMAND | SUGGEST_COMMAND | OPEN_URL | NONE
+# components:   [Additional clickable lines/buttons]
+# prefix:       true/false — whether to prepend global chat prefix
+# sound:        {type, volume, pitch}
+# particles:    [{type, count, offset: [x, y, z], speed}]
+# actionbar:    {text, durationTicks}
+# bossbar:      {text, color, overlay, progress, time}
+# effects:      [{type, durationTicks, amplifier}]
+# title:        {text, subtitle, timings: [fadeIn, stay, fadeOut]}
+# =========================================================
+
+messages:
+
+  # 🚫 NO PERMISSION
+  no-permission:
+    text: [ "<red>You don't have permission to use this admin command." ]
+    hover: "<gray>Missing admin-level permission node."
+    click: ""
+    clickType: "NONE"
+    components: [ ]
+    prefix: true
+    sound: { type: BLOCK_NOTE_BLOCK_BASS, volume: 1.0, pitch: 1.0 }
+    particles: [ { type: SMOKE_NORMAL, count: 4, offset: [0.1, 0.3, 0.1], speed: 0.01 } ]
+    effects: [ { type: SLOW, amplifier: 0, duration: 100 } ]
+    bossbar: { text: "<red>Missing Admin Permission", color: "RED", overlay: "PROGRESS", time: 60, progress: 1.0 }
+    actionbar: { text: "<red>Permission denied.", duration: 60 }
+    title:
+      text: "<red><bold>Permission Denied</bold></red>"
+      subtitle: "<gray>You don’t have access to this command."
+      timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
+
+  # ❓ UNKNOWN ADMIN SUBCOMMAND
+  unknown-admin-command:
+    text: [ "<red>Unknown admin command. Try <yellow>/compressor admin help</yellow>." ]
+    hover: "<gray>This admin subcommand wasn’t recognized."
+    click: "/compressor admin help"
+    clickType: "SUGGEST_COMMAND"
+    components: [ ]
+    prefix: true
+    sound: { type: ENTITY_VILLAGER_NO, volume: 1.0, pitch: 1.0 }
+    particles: [ { type: SMOKE_LARGE, count: 5, offset: [0.2, 0.4, 0.2], speed: 0.01 } ]
+    bossbar: { text: "<red>Unknown Subcommand", color: "RED", overlay: "PROGRESS", time: 60, progress: 1.0 }
+    actionbar: { text: "<gray>Unknown admin command.", duration: 60 }
+    title:
+      text: "<red><bold>Unknown Command</bold></red>"
+      subtitle: "<gray>Try /compressor admin help"
+      timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
+
+  # 🔄 CONFIG RELOAD SUCCESS
+  config-reloaded:
+    text: [ "<green>ConquestCompressor configuration reloaded." ]
+    hover: "<gray>All config files refreshed successfully."
+    click: ""
+    clickType: "NONE"
+    components: [ ]
+    prefix: true
+    sound: { type: ENTITY_EXPERIENCE_ORB_PICKUP, volume: 1.0, pitch: 1.2 }
+    particles: [ { type: FIREWORKS_SPARK, count: 6, offset: [0.2, 0.4, 0.2], speed: 0.02 } ]
+    effects: [ { type: GLOWING, amplifier: 0, duration: 80 } ]
+    bossbar: { text: "<green>✔ Config Reloaded", color: "GREEN", overlay: "PROGRESS", time: 60, progress: 1.0 }
+    actionbar: { text: "<yellow>Configs updated.", duration: 60 }
+    title:
+      text: "<green><bold>Reload Successful</bold></green>"
+      subtitle: "<gray>Configuration files refreshed!"
+      timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
+
+  # 🛠️ ADMIN HELP (PAGINATED)
+  admin-help:
+    text:
+      - ""
+      - "<gray><bold>🛠 ConquestCompressor Admin Help</bold>"
+      - ""
+    hover: "<gray>Click any command to autofill it.</gray>"
+    click: ""
+    clickType: "NONE"
+    components:
+      - text: " <white>/compressor admin help <gray>- View this menu"
+        hover: "<gray>Show admin help menu</gray>"
+        click: "/compressor admin help"
+        clickType: "SUGGEST_COMMAND"
+        permission: "conquestcompressor.admin.help"
+
+      - text: " <white>/compressor admin reload <gray>- Reload plugin configs"
+        hover: "<gray>Reload all configuration files</gray>"
+        click: "/compressor admin reload"
+        clickType: "SUGGEST_COMMAND"
+        permission: "conquestcompressor.admin.reload"
+
+    prefix: true
+    sound: { type: UI_BUTTON_CLICK, volume: 1.0, pitch: 1.1 }
+    particles: [ { type: CRIT_MAGIC, count: 5, offset: [0.2, 0.3, 0.2], speed: 0.02 } ]
+    effects: [ { type: NIGHT_VISION, amplifier: 0, duration: 60 } ]
+    bossbar: { text: "<green>Admin Help Page", color: "GREEN", overlay: "PROGRESS", time: 60, progress: 1.0 }
+    actionbar: { text: "<gray>You're viewing admin commands.", duration: 60 }
+    title:
+      text: "<gold><bold>Compressor Admin</bold></gold>"
+      subtitle: "<gray>View admin tools and commands."
+      timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
+
+  # 💡 USAGE HINT WHEN MISSING ARGUMENT
+  admin-usage-hint:
+    text: [ "<gray>Try <yellow>/compressor admin help</yellow> to see valid admin commands." ]
+    hover: "<gray>Lists available tools like reload, compress, etc."
+    click: "/compressor admin help"
+    clickType: "SUGGEST_COMMAND"
+    components:
+      - text: "<aqua>[View Admin Help]</aqua>"
+        hover: "<gray>Click to suggest the help command"
+        click: "/compressor admin help"
+        clickType: "SUGGEST_COMMAND"
+    prefix: true
+    sound: { type: UI_BUTTON_CLICK, volume: 1.0, pitch: 1.0 }
+    particles: [ { type: ENCHANTMENT_TABLE, count: 4, offset: [0.2, 0.4, 0.2], speed: 0.01 } ]
+    bossbar: { text: "<yellow>Admin Help Suggested", color: "YELLOW", overlay: "PROGRESS", time: 60, progress: 0.5 }
+    actionbar: { text: "<gray>Use /compressor admin help.", duration: 60 }
+    title:
+      text: "<gold><bold>Compressor Admin</bold></gold>"
+      subtitle: "<gray>Use /compressor admin help to get started."
+      timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
+
+# End Of Config :D

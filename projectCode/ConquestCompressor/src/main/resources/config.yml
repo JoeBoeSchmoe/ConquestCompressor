@@ -1,0 +1,81 @@
+# ===================================================
+# 🧱 ConquestCompressor - Configuration File
+# Controls compression logic, GUI settings, cooldowns, and global formatting.
+# Reloadable at runtime using /conquestcompressor reload.
+# ===================================================
+
+# ===================================================
+# 🎨 MiniMessage Formatting Guide (Used in names/lore)
+# ===================================================
+# ✅ Color Tags: <red>, <green>, <yellow>, <white>, <gray>
+# ✅ Text Styles: <bold>, <italic>, <underlined>, <strikethrough>, <obfuscated>
+# ✅ Gradients: <gradient:#ff0000:#ffff00>text</gradient>
+# ✅ Hex Colors: <#34ebcf>, <#ffaa00>, etc
+# ✅ Events: <hover:show_text:'hello'>hover me</hover>, <click:run_command:'/warp'>
+#
+# Full syntax: https://docs.advntr.dev/minimessage/format.html
+
+# ===================================================
+# 🎨 Global Message Styling
+# Prefix shown before all plugin messages.
+# Supports MiniMessage.
+# ===================================================
+chat-prefix: "<dark_gray>[<gold>Compressor<dark_gray>]<gray> "
+
+# ===================================================
+# 🌍 World Restrictions
+# Restrict compression-related actions to specific worlds.
+# ===================================================
+world-restrictions:
+  whitelist-worlds: false # If true, compression only allowed in listed worlds
+  allowed-worlds:
+    - world
+    - world_nether
+    - world_the_end
+#    - custom_world
+
+# ===================================================
+# 🧭 Command Aliases
+# Aliases for /conquestcompressor
+# These must match plugin.yml.
+# ===================================================
+command-aliases:
+  - conquestcompressor
+  - ccompressor
+  - compressor
+
+# ===================================================
+# 📘 PlaceholderAPI Integration
+# Set to false to disable placeholder parsing even if PAPI is installed.
+# ===================================================
+placeholders:
+  use-placeholderapi: true
+
+# ===================================================
+# ⏱️ Cooldowns (in milliseconds)
+# Controls how often players can trigger compression actions.
+# ===================================================
+cooldowns:
+  command-delay-ms: 500             # Delay between command executions
+  gui-action-cooldown-ms: 150       # Delay between GUI item clicks
+  compression-action-cooldown-ms: 3000 # Delay between compress/decompress actions
+
+# ===================================================
+# 🕒 GUI Timeout
+# Automatically closes the compressor GUI if idle (in seconds).
+# Set to 0 to disable this feature.
+# ===================================================
+gui-settings:
+  timeout-seconds: 60
+
+# ===================================================
+# 🔧 Compression Settings
+# Global control over how compression behaves.
+# Expand this section in future updates.
+# ===================================================
+compression:
+  max-stack-size: 64           # Max items per compressed stack
+  allow-auto-compress: true    # Toggle for automatic compression on pickup
+  log-compression-events: true # Enable debug/info logs for compression tasks
+
+# End of config.yml
