@@ -1,0 +1,203 @@
+# ============================================================
+# ⚙ Compressor GUI Configuration
+# Purpose: Lets players compress items using a custom GUI.
+# Reloadable via: /pluginname reload
+# ============================================================
+
+menu:
+  title: "<dark_gray>Compressor Machine"
+  filler: true
+  rows-per-page: 3 # Minimum Of 1 Enforced (Maximum Of 6)
+
+  filler-item:
+    material: BLACK_STAINED_GLASS_PANE
+    name: "<gray>"
+    amount: 1
+    enchanted: false
+    lore: [ ]
+    customData:
+      CustomModelData: 100
+
+    sound:
+      type: BLOCK_NOTE_BLOCK_BASS
+      volume: 1.0
+      pitch: 0.7
+
+    particles:
+      - type: SMOKE_LARGE
+        count: 8
+        offsetX: 0.2
+        offsetY: 0.1
+        offsetZ: 0.2
+        speed: 0.02
+
+  sounds:
+    open:
+      type: BLOCK_PISTON_EXTEND
+      volume: 1.0
+      pitch: 1.2
+      particles:
+        - type: CLOUD
+          count: 10
+          offsetX: 0.2
+          offsetY: 0.2
+          offsetZ: 0.2
+          speed: 0.03
+
+    close:
+      type: BLOCK_PISTON_CONTRACT
+      volume: 1.0
+      pitch: 1.0
+      particles:
+        - type: SMOKE_NORMAL
+          count: 8
+          offsetX: 0.1
+          offsetY: 0.2
+          offsetZ: 0.1
+          speed: 0.02
+
+    confirm:
+      type: ENTITY_PLAYER_LEVELUP
+      volume: 1.0
+      pitch: 1.3
+      particles:
+        - type: FIREWORKS_SPARK
+          count: 15
+          offsetX: 0.3
+          offsetY: 0.4
+          offsetZ: 0.3
+          speed: 0.05
+
+    cancel:
+      type: BLOCK_NOTE_BLOCK_BASS
+      volume: 1.0
+      pitch: 0.9
+      particles:
+        - type: SMOKE_NORMAL
+          count: 10
+          offsetX: 0.2
+          offsetY: 0.2
+          offsetZ: 0.2
+          speed: 0.03
+
+    invalid-click:
+      type: BLOCK_NOTE_BLOCK_BASS
+      volume: 1.0
+      pitch: 0.8
+      particles:
+        - type: CRIT
+          count: 10
+          offsetX: 0.2
+          offsetY: 0.1
+          offsetZ: 0.2
+          speed: 0.03
+
+  layout:
+    # 🔄 Input Slot
+    - slot: 11
+      action: input
+      material: CHEST
+      amount: 1
+      name: "<yellow>Input Item"
+      lore:
+        - "<gray>Place the item you want to compress."
+      enchanted: false
+      customData:
+        CustomModelData: 1101
+
+    # ⚙ Output Slot
+    - slot: 15
+      action: output
+      material: HOPPER
+      amount: 1
+      name: "<green>Output Result"
+      lore:
+        - "<gray>Your compressed item will appear here."
+      enchanted: true
+      customData:
+        CustomModelData: 1102
+
+    # ❌ Cancel
+    - action: cancel
+      slot: 28
+      material: RED_STAINED_GLASS_PANE
+      amount: 1
+      name: "<red>✖ Cancel"
+      lore:
+        - "<gray>Click to close the compressor."
+        - "<red>No items will be consumed."
+      enchanted: false
+      customData:
+        CustomModelData: 1202
+
+    # ❌ Cancel
+    - action: cancel
+      slot: 29
+      material: RED_STAINED_GLASS_PANE
+      amount: 1
+      name: "<red>✖ Cancel"
+      lore:
+        - "<gray>Click to close the compressor."
+        - "<red>No items will be consumed."
+      enchanted: false
+      customData:
+        CustomModelData: 1202
+
+    # ❌ Cancel
+    - action: cancel
+      slot: 30
+      material: RED_STAINED_GLASS_PANE
+      amount: 1
+      name: "<red>✖ Cancel"
+      lore:
+        - "<gray>Click to close the compressor."
+        - "<red>No items will be consumed."
+      enchanted: false
+      customData:
+        CustomModelData: 1202
+
+    # ✅ Confirm Compression
+    - action: confirm
+      slot: 32
+      material: LIME_STAINED_GLASS_PANE
+      amount: 1
+      name: "<green>✔ Compress"
+      lore:
+        - "<gray>Click to compress the input item."
+        - "<green>This will consume the item."
+      enchanted: true
+      customData:
+        CustomModelData: 1201
+
+    # ✅ Confirm Compression
+    - action: confirm
+      slot: 33
+      material: LIME_STAINED_GLASS_PANE
+      amount: 1
+      name: "<green>✔ Compress"
+      lore:
+        - "<gray>Click to compress the input item."
+        - "<green>This will consume the item."
+      enchanted: true
+      customData:
+        CustomModelData: 1201
+
+    # ✅ Confirm Compression
+    - action: confirm
+      slot: 34
+      material: LIME_STAINED_GLASS_PANE
+      amount: 1
+      name: "<green>✔ Compress"
+      lore:
+        - "<gray>Click to compress the input item."
+        - "<green>This will consume the item."
+      enchanted: true
+      customData:
+        CustomModelData: 1201
+
+# ============================================================
+# Notes:
+# - All MiniMessage format codes supported.
+# - CustomModelData allows custom resource pack integration.
+# - Confirm and cancel buttons should be handled in plugin logic.
+# ============================================================

@@ -33,6 +33,9 @@ public class ConfigurationManager {
             GameRecipesFile.load();
             GameAutocompressorFile.load();
 
+            RecipesGUIFile.load();
+            CompressorGUIFile.load();
+
             this.config = ConfigFile.getConfig();
 
             // ✅ Validate structure
