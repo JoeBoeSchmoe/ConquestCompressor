@@ -54,7 +54,7 @@ public class CompressorGUIFile {
 
         config = YamlConfiguration.loadConfiguration(file);
         parseButtons();
-        log.info("✅ Loaded compressorGUI.yml successfully.");
+        log.info("✅  Loaded compressorGUI.yml successfully.");
     }
 
     private static void parseButtons() {

@@ -1,6 +1,7 @@
 package org.conquest.conquestCompressor.functionalHandler.compressorHandler;
 
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.conquest.conquestCompressor.functionalHandler.ItemDataModel;
 
 /**
@@ -10,15 +11,15 @@ import org.conquest.conquestCompressor.functionalHandler.ItemDataModel;
 public class CompressorModel {
 
     private final String key;
-    private final boolean enabled;
+    private boolean enabled;
 
-    private final Material inputMaterial;
-    private final int inputAmount;
-    private final ItemDataModel inputItemData;
+    private Material inputMaterial;
+    private int inputAmount;
+    private ItemDataModel inputItemData;
 
-    private final Material outputMaterial;
-    private final int outputAmount;
-    private final ItemDataModel outputItemData;
+    private Material outputMaterial;
+    private int outputAmount;
+    private ItemDataModel outputItemData;
 
     public CompressorModel(String key,
                            boolean enabled,
@@ -38,6 +39,18 @@ public class CompressorModel {
         this.outputItemData = outputItemData;
     }
 
+    // For dynamic creation
+    public CompressorModel(String key) {
+        this.key = key;
+        this.enabled = true;
+        this.inputMaterial = Material.STONE;
+        this.inputAmount = 1;
+        this.inputItemData = new ItemDataModel();
+        this.outputMaterial = Material.DIAMOND;
+        this.outputAmount = 1;
+        this.outputItemData = new ItemDataModel();
+    }
+
     public String getKey() {
         return key;
     }
@@ -46,27 +59,66 @@ public class CompressorModel {
         return enabled;
     }
 
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public Material getInputMaterial() {
         return inputMaterial;
+    }
+
+    public void setInputMaterial(Material inputMaterial) {
+        this.inputMaterial = inputMaterial;
     }
 
     public int getInputAmount() {
         return inputAmount;
     }
 
+    public void setInputAmount(int inputAmount) {
+        this.inputAmount = inputAmount;
+    }
+
     public ItemDataModel getInputItemData() {
         return inputItemData;
+    }
+
+    public void setInputItemData(ItemDataModel inputItemData) {
+        this.inputItemData = inputItemData;
     }
 
     public Material getOutputMaterial() {
         return outputMaterial;
     }
 
+    public void setOutputMaterial(Material outputMaterial) {
+        this.outputMaterial = outputMaterial;
+    }
+
     public int getOutputAmount() {
         return outputAmount;
     }
 
+    public void setOutputAmount(int outputAmount) {
+        this.outputAmount = outputAmount;
+    }
+
     public ItemDataModel getOutputItemData() {
         return outputItemData;
+    }
+
+    public void setOutputItemData(ItemDataModel outputItemData) {
+        this.outputItemData = outputItemData;
+    }
+
+    /**
+     * Builds a new output item stack with this recipe's metadata applied.
+     */
+    public ItemStack buildOutputItem() {
+        ItemStack item = new ItemStack(this.outputMaterial, 1);
+        if (this.outputItemData != null) {
+            this.outputItemData.applyTo(item);
+        }
+        return item;
     }
 }

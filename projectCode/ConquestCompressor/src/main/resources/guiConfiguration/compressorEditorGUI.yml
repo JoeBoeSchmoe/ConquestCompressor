@@ -7,7 +7,7 @@
 menu:
   title: "<dark_gray>Compressor Machine"
   filler: true
-  rows-per-page: 3 # Minimum Of 1 Enforced (Maximum Of 6)
+  rows-per-page: 4 # Minimum Of 1 Enforced (Maximum Of 6)
 
   filler-item:
     material: BLACK_STAINED_GLASS_PANE

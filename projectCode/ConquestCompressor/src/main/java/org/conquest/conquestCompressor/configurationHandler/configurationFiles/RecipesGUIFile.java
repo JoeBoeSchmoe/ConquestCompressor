@@ -38,15 +38,15 @@ public class RecipesGUIFile {
         if (!file.exists()) {
             File folder = file.getParentFile();
             if (!folder.exists() && !folder.mkdirs()) {
-                log.warning("⚠️ Failed to create folder: " + folder.getAbsolutePath());
+                log.warning("⚠️  Failed to create folder: " + folder.getAbsolutePath());
             }
 
             try (InputStream in = plugin.getResource("guiConfiguration/recipeEditorGUI.yml")) {
                 if (in != null) {
-                    log.info("📄 Created default recipeEditorGUI.yml");
+                    log.info("📄  Created default recipeEditorGUI.yml");
                     Files.copy(in, file.toPath());
                 } else {
-                    log.warning("⚠️ Embedded recipeEditorGUI.yml not found in JAR.");
+                    log.warning("⚠️  Embedded recipeEditorGUI.yml not found in JAR.");
                 }
             } catch (IOException e) {
                 log.severe("❌ Failed to create recipeEditorGUI.yml: " + e.getMessage());
@@ -55,7 +55,7 @@ public class RecipesGUIFile {
 
         config = YamlConfiguration.loadConfiguration(file);
         parseButtons();
-        log.info("✅ Loaded recipeEditorGUI.yml successfully.");
+        log.info("✅  Loaded recipeEditorGUI.yml successfully.");
     }
 
     private static void parseButtons() {

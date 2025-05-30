@@ -52,6 +52,20 @@ public class EditingSessionManager {
         sessions.entrySet().removeIf(e -> e.getValue().isExpired(SESSION_TIMEOUT));
     }
 
+    /**
+     * 🔒 Closes all inventories of players in editing sessions.
+     */
+    public static void closeAll() {
+        for (UUID uuid : sessions.keySet()) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player != null && player.isOnline()) {
+                Bukkit.getScheduler().runTask(ConquestCompressor.getInstance(), () -> {
+                    player.closeInventory(); // ✅ Explicit no-arg method
+                });
+            }
+        }
+    }
+
     public static void expireInactiveSessions(long timeoutMillis) {
         long now = System.currentTimeMillis();
         Set<UUID> expired = new HashSet<>();

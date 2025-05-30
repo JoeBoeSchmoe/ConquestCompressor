@@ -1,16 +1,24 @@
 package org.conquest.conquestCompressor;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.conquest.conquestCompressor.commandHandler.CommandManager;
+import org.conquest.conquestCompressor.compressingHandler.CompressorListener;
 import org.conquest.conquestCompressor.configurationHandler.ConfigurationManager;
+import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.EditGUIListener;
+import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.EditingSessionManager;
+import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.EditorMenuManager;
 
 import java.util.List;
 import java.util.Objects;
 
 /**
  * 🧱 ConquestCompressor
- * Main plugin class. Handles lifecycle, configuration, and listener registration.
+ * Main plugin class. Handles lifecycle, configuration, and system initialization.
  */
 public final class ConquestCompressor extends JavaPlugin {
 
@@ -20,63 +28,109 @@ public final class ConquestCompressor extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        getLogger().info("🔧  Initializing ConquestCompressor...");
+        getLogger().info("🔧  Enabling ConquestCompressor...");
 
-        // 🔁 Load config and YAML files
+        // 🔁 Load config and files
         configurationManager = new ConfigurationManager();
         configurationManager.initialize();
+
+        // 🧠 Load GUI menu metadata
+        EditorMenuManager.load();
 
         // 📜 Register commands
         setupCommands();
 
-        // 🎧 Register events
-        registerListeners();
+        // 🎧 Register listeners
+        registerListeners(
+                new EditGUIListener(),
+                new CompressorListener()
+        );
 
-        getLogger().info("✅  ConquestCompressor enabled successfully.");
+        // 🧠 Start interval-based compression if enabled
+        CompressorListener.initializeAutoCompression();
+
+        getLogger().info("✅ ConquestCompressor enabled successfully.");
     }
 
     @Override
     public void onDisable() {
-        getLogger().info("📴  ConquestCompressor has been disabled.");
+        getLogger().info("📦 Saving plugin state...");
+
+        // ❌ Close sessions and clear memory
+        EditingSessionManager.closeAll();
+        EditingSessionManager.clear();
+
+        EditorMenuManager.clear();
+
+        // 🔻 Unregister all event listeners
+        HandlerList.unregisterAll(this);
+
+        // 🛑 Cancel scheduled tasks (like interval compression)
+        Bukkit.getScheduler().cancelTasks(this);
+
+        getLogger().info("🔻 ConquestCompressor has been disabled.");
     }
 
     /**
-     * Reloads configuration and supporting files.
+     * Reloads configuration and editor menu metadata.
      */
     public void reload() {
         getLogger().info("🔄  Reloading ConquestCompressor...");
+
+        // ❌ Reset open menus and state
+        EditingSessionManager.closeAll();
+        EditingSessionManager.clear();
+
+        // ♻️ Re-initialize configs + menus
         configurationManager.initialize();
+        EditorMenuManager.reload();
+
+        // 🔁 Unregister old listeners first
+        HandlerList.unregisterAll(this);
+
+        // 🎧 Register new listener instances
+        registerListeners(
+                new EditGUIListener(),
+                new CompressorListener()
+        );
+
+        // 🕒 Restart interval logic if needed
+        CompressorListener.initializeAutoCompression();
+
         getLogger().info("✅  Reload complete.");
     }
 
     /**
-     * Registers main command and aliases as defined in plugin.yml and config.yml
+     * Registers main command and aliases.
      */
     private void setupCommands() {
         CommandManager commandManager = new CommandManager();
+        PluginCommand command = getCommand("conquestcompressor");
 
-        // Main command must match plugin.yml
-        PluginCommand baseCommand = getCommand("conquestcompressor");
-        if (baseCommand == null) {
-            getLogger().severe("❌  Command 'conquestcompressor' not registered in plugin.yml.");
+        if (command == null) {
+            getLogger().severe("❌ Command 'conquestcompressor' not found in plugin.yml!");
             return;
         }
 
-        baseCommand.setExecutor(commandManager);
-        baseCommand.setTabCompleter(commandManager);
+        command.setExecutor(commandManager);
+        command.setTabCompleter(commandManager);
 
-        // Log aliases defined in config (not dynamically registered but good for debugging)
         List<String> aliases = getConfig().getStringList("command-aliases");
         if (!aliases.isEmpty()) {
-            getLogger().info("🔗  Registered aliases from config: " + String.join(", ", aliases));
+            getLogger().info("🔗 Registered aliases: " + String.join(", ", aliases));
         }
     }
 
     /**
-     * Registers all Bukkit event listeners.
+     * Registers plugin event listeners.
      */
-    private void registerListeners() {
-        // Bukkit.getPluginManager().registerEvents(new ExampleListener(), this);
+    private void registerListeners(Listener... listeners) {
+        for (Listener listener : listeners) {
+            getServer().getPluginManager().registerEvents(listener, this);
+        }
+
+        // Add listeners here as needed
+        // registerListeners(new CompressorEditorListener());
     }
 
     public static ConquestCompressor getInstance() {

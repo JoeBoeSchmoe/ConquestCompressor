@@ -61,15 +61,15 @@ messages:
 
   # 💡 USAGE HINT
   usage-hint:
-    text: [ "<gray>Use <yellow>/compressor admin help</yellow> to get started." ]
+    text: [ "<gray>Use <yellow>/compressor help</yellow> to get started." ]
     hover: "<gray>See available commands and info."
-    click: "/compressor admin help"
+    click: "/compressor help"
     clickType: "SUGGEST_COMMAND"
     components: [
       {
-        text: "<aqua>[Open Admin Help]</aqua>",
+        text: "<aqua>[Open Help]</aqua>",
         hover: "<gray>Click to view admin help menu",
-        click: "/compressor admin help",
+        click: "/compressor help",
         clickType: "SUGGEST_COMMAND"
       }
     ]
@@ -77,10 +77,12 @@ messages:
     sound: { type: UI_BUTTON_CLICK, volume: 1.0, pitch: 1.0 }
     particles: [ { type: ENCHANTMENT_TABLE, count: 4, offset: [0.2, 0.3, 0.2], speed: 0.01 } ]
     bossbar: { text: "<yellow>Need Help?", color: "YELLOW", overlay: "PROGRESS", time: 60, progress: 0.5 }
-    actionbar: { text: "<gray>Try /compressor admin help", duration: 60 }
+    actionbar: { text: "<gray>Try /compressor help", duration: 60 }
     title:
       text: "<gold><bold>Compressor Help</bold></gold>"
-      subtitle: "<gray>Try /compressor admin help to get started."
+      subtitle: "<gray>Try /compressor help to get started."
       timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
+
+
 
 # End Of Config :D

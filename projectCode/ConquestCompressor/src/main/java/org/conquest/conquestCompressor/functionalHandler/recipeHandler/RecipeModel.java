@@ -42,6 +42,24 @@ public class RecipeModel {
         this.resultItemData = resultItemData;
     }
 
+    // For Creation
+    public RecipeModel(String key) {
+        this.key = key;
+        this.enabled = true;
+
+        // Initialize empty 3x3 layout
+        this.layout = new java.util.HashMap<>();
+        this.layoutItemData = new java.util.HashMap<>();
+        for (int i = 1; i <= 9; i++) {
+            String slot = "CraftingSlot" + i;
+            layout.put(slot, Material.AIR);
+            layoutItemData.put(slot, new ItemDataModel());
+        }
+
+        this.resultMaterial = Material.DIAMOND;
+        this.resultAmount = 1;
+        this.resultItemData = new ItemDataModel();
+    }
     public String getKey() {
         return key;
     }

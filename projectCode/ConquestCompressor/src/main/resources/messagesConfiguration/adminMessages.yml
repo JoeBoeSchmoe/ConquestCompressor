@@ -130,4 +130,251 @@ messages:
       subtitle: "<gray>Use /compressor admin help to get started."
       timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
 
+  # 🔍 COMPRESSOR NOT FOUND
+  compressor-not-found:
+    text: [ "<red>Compressor '<white>{key}</white>' not found." ]
+    hover: "<gray>No compressor exists by that key.</gray>"
+    click: "/compressor admin list"
+    clickType: "SUGGEST_COMMAND"
+    components: [ ]
+    prefix: true
+    sound: { type: ENTITY_VILLAGER_NO, volume: 1.0, pitch: 0.9 }
+    particles: [ { type: SMOKE_LARGE, count: 6, offset: [ 0.3, 0.4, 0.3 ], speed: 0.02 } ]
+    bossbar: { text: "<red>Compressor Not Found", color: "RED", overlay: "PROGRESS", time: 60, progress: 1.0 }
+    actionbar: { text: "<gray>No compressor found by that key.", duration: 60 }
+    title:
+      text: "<red><bold>Not Found</bold></red>"
+      subtitle: "<gray>Check the key and try again."
+      timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
+
+  # ✏️ MISSING COMPRESSOR KEY (EDIT)
+  edit-missing-key:
+    text: [ "<red>You must specify a compressor key to edit." ]
+    hover: "<gray>Try something like <white>/compressor admin edit <compressor-id></white>"
+    click: "/compressor admin edit "
+    clickType: "SUGGEST_COMMAND"
+    components: [ ]
+    prefix: true
+    sound: { type: BLOCK_NOTE_BLOCK_BASS, volume: 1.0, pitch: 1.0 }
+    particles: [ { type: SPELL_WITCH, count: 4, offset: [ 0.2, 0.3, 0.2 ], speed: 0.01 } ]
+    bossbar: { text: "<yellow>Missing Key", color: "YELLOW", overlay: "PROGRESS", time: 60, progress: 0.8 }
+    actionbar: { text: "<gray>Please enter a key to edit.", duration: 60 }
+    title:
+      text: "<gold><bold>Missing Key</bold></gold>"
+      subtitle: "<gray>Provide a compressor key to continue."
+      timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
+
+  # 🆕 MISSING COMPRESSOR KEY (CREATE)
+  create-missing-key:
+    text: [ "<red>You must specify a new compressor key." ]
+    hover: "<gray>Example: <white>/compressor admin create <new-id></white>"
+    click: "/compressor admin create "
+    clickType: "SUGGEST_COMMAND"
+    components: [ ]
+    prefix: true
+    sound: { type: BLOCK_NOTE_BLOCK_PLING, volume: 1.0, pitch: 1.2 }
+    particles: [ { type: FIREWORKS_SPARK, count: 5, offset: [ 0.3, 0.4, 0.3 ], speed: 0.01 } ]
+    bossbar: { text: "<yellow>Key Required", color: "YELLOW", overlay: "PROGRESS", time: 60, progress: 0.8 }
+    actionbar: { text: "<gray>Specify a new key to create a compressor.", duration: 60 }
+    title:
+      text: "<aqua><bold>Create Needs Key</bold></aqua>"
+      subtitle: "<gray>Use a key to define your new compressor."
+      timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
+
+  # 🗑️ COMPRESSOR DELETE SUCCESS
+  compressor-delete-success:
+    text: [ "<green>Compressor '<white>{key}</white>' was successfully deleted." ]
+    hover: "<gray>The compressor has been removed from storage.</gray>"
+    click: "/compressor admin list"
+    clickType: "SUGGEST_COMMAND"
+    components: [ ]
+    prefix: true
+    sound: { type: ENTITY_ITEM_PICKUP, volume: 1.0, pitch: 1.2 }
+    particles: [ { type: CLOUD, count: 5, offset: [0.2, 0.3, 0.2], speed: 0.01 } ]
+    bossbar: { text: "<green>Compressor Deleted", color: "GREEN", overlay: "PROGRESS", time: 60, progress: 1.0 }
+    actionbar: { text: "<gray>Compressor deleted successfully.", duration: 60 }
+    title:
+      text: "<green><bold>Deleted</bold></green>"
+      subtitle: "<gray>The compressor '<white>{key}</white>' was removed."
+      timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
+
+  # ❌ COMPRESSOR DELETE FAIL
+  compressor-delete-fail:
+    text: [ "<red>Failed to delete compressor '<white>{key}</white>'." ]
+    hover: "<gray>This key might not exist, or something went wrong.</gray>"
+    click: "/compressor admin list"
+    clickType: "SUGGEST_COMMAND"
+    components: [ ]
+    prefix: true
+    sound: { type: ENTITY_VILLAGER_NO, volume: 1.0, pitch: 0.8 }
+    particles: [ { type: SMOKE_NORMAL, count: 6, offset: [0.2, 0.4, 0.2], speed: 0.02 } ]
+    bossbar: { text: "<red>Delete Failed", color: "RED", overlay: "PROGRESS", time: 60, progress: 1.0 }
+    actionbar: { text: "<gray>Compressor deletion failed.", duration: 60 }
+    title:
+      text: "<red><bold>Delete Failed</bold></red>"
+      subtitle: "<gray>Could not delete compressor '<white>{key}</white>'."
+      timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
+
+  # 🚫 COMPRESSOR ALREADY EXISTS
+  compressor-already-exists:
+    text: [ "<red>A compressor with key '<white>{key}</white>' already exists. Use <yellow>/compressor admin edit {key}</yellow> instead." ]
+    hover: "<gray>Compressor keys must be unique.</gray>"
+    click: "/compressor admin edit {key}"
+    clickType: "SUGGEST_COMMAND"
+    components: [ ]
+    prefix: true
+    sound: { type: ENTITY_VILLAGER_NO, volume: 1.0, pitch: 0.9 }
+    particles: [ { type: SMOKE_NORMAL, count: 5, offset: [0.2, 0.3, 0.2], speed: 0.01 } ]
+    bossbar: { text: "<red>Compressor Key Already Exists", color: "RED", overlay: "PROGRESS", time: 60, progress: 1.0 }
+    actionbar: { text: "<gray>That key is already in use.", duration: 60 }
+    title:
+      text: "<red><bold>Key Conflict</bold></red>"
+      subtitle: "<gray>The key '<white>{key}</white>' is already used."
+      timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
+
+  # 🛠️ COMPRESSOR USAGE HINT
+  compressor-usage-hint:
+    text: [ "<gray>Try <yellow>/compressor admin compressor <edit|create|delete> <key></yellow>" ]
+    hover: "<gray>Edit, create, or remove a compressor using a key.</gray>"
+    click: "/compressor admin compressor "
+    clickType: "SUGGEST_COMMAND"
+    components:
+      - text: "<aqua>[Compressor Syntax]</aqua>"
+        hover: "<gray>Click to autofill the compressor admin command</gray>"
+        click: "/compressor admin compressor "
+        clickType: "SUGGEST_COMMAND"
+    prefix: true
+    sound: { type: UI_BUTTON_CLICK, volume: 1.0, pitch: 1.0 }
+    particles: [ { type: NOTE, count: 4, offset: [0.1, 0.3, 0.1], speed: 0.01 } ]
+    bossbar: { text: "<yellow>Compressor Usage", color: "YELLOW", overlay: "PROGRESS", time: 60, progress: 0.6 }
+    actionbar: { text: "<gray>Need help? Use the compressor admin syntax.", duration: 60 }
+    title:
+      text: "<gold><bold>Compressor Usage</bold></gold>"
+      subtitle: "<gray>Use /compressor admin compressor for details."
+      timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
+
+  # 📄 RECIPE NOT FOUND
+  recipe-not-found:
+    text: [ "<red>Recipe '<white>{key}</white>' not found." ]
+    hover: "<gray>No recipe exists by that key.</gray>"
+    click: "/compressor admin list"
+    clickType: "SUGGEST_COMMAND"
+    components: [ ]
+    prefix: true
+    sound: { type: ENTITY_VILLAGER_NO, volume: 1.0, pitch: 0.9 }
+    particles: [ { type: SMOKE_LARGE, count: 6, offset: [0.3, 0.4, 0.3], speed: 0.02 } ]
+    bossbar: { text: "<red>Recipe Not Found", color: "RED", overlay: "PROGRESS", time: 60, progress: 1.0 }
+    actionbar: { text: "<gray>No recipe found by that key.", duration: 60 }
+    title:
+      text: "<red><bold>Not Found</bold></red>"
+      subtitle: "<gray>Check the key and try again."
+      timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
+
+  # ✏️ MISSING RECIPE KEY (EDIT)
+  edit-recipe-missing-key:
+    text: [ "<red>You must specify a recipe key to edit." ]
+    hover: "<gray>Try something like <white>/compressor admin edit <recipe-id></white>"
+    click: "/compressor admin edit "
+    clickType: "SUGGEST_COMMAND"
+    components: [ ]
+    prefix: true
+    sound: { type: BLOCK_NOTE_BLOCK_BASS, volume: 1.0, pitch: 1.0 }
+    particles: [ { type: SPELL_WITCH, count: 4, offset: [0.2, 0.3, 0.2], speed: 0.01 } ]
+    bossbar: { text: "<yellow>Missing Key", color: "YELLOW", overlay: "PROGRESS", time: 60, progress: 0.8 }
+    actionbar: { text: "<gray>Please enter a key to edit.", duration: 60 }
+    title:
+      text: "<gold><bold>Missing Key</bold></gold>"
+      subtitle: "<gray>Provide a recipe key to continue."
+      timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
+
+  # 🆕 MISSING RECIPE KEY (CREATE)
+  create-recipe-missing-key:
+    text: [ "<red>You must specify a new recipe key." ]
+    hover: "<gray>Example: <white>/compressor admin create <new-id></white>"
+    click: "/compressor admin create "
+    clickType: "SUGGEST_COMMAND"
+    components: [ ]
+    prefix: true
+    sound: { type: BLOCK_NOTE_BLOCK_PLING, volume: 1.0, pitch: 1.2 }
+    particles: [ { type: FIREWORKS_SPARK, count: 5, offset: [0.3, 0.4, 0.3], speed: 0.01 } ]
+    bossbar: { text: "<yellow>Key Required", color: "YELLOW", overlay: "PROGRESS", time: 60, progress: 0.8 }
+    actionbar: { text: "<gray>Specify a new key to create a recipe.", duration: 60 }
+    title:
+      text: "<aqua><bold>Create Needs Key</bold></aqua>"
+      subtitle: "<gray>Use a key to define your new recipe."
+      timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
+
+  # ✅ RECIPE DELETE SUCCESS
+  recipe-delete-success:
+    text: [ "<green>Recipe '<white>{key}</white>' was successfully deleted." ]
+    hover: "<gray>The recipe has been removed from storage.</gray>"
+    click: "/compressor admin list"
+    clickType: "SUGGEST_COMMAND"
+    components: [ ]
+    prefix: true
+    sound: { type: ENTITY_ITEM_PICKUP, volume: 1.0, pitch: 1.2 }
+    particles: [ { type: CLOUD, count: 5, offset: [0.2, 0.3, 0.2], speed: 0.01 } ]
+    bossbar: { text: "<green>Recipe Deleted", color: "GREEN", overlay: "PROGRESS", time: 60, progress: 1.0 }
+    actionbar: { text: "<gray>Recipe deleted successfully.", duration: 60 }
+    title:
+      text: "<green><bold>Deleted</bold></green>"
+      subtitle: "<gray>The recipe '<white>{key}</white>' was removed."
+      timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
+
+  # ❌ RECIPE DELETE FAIL
+  recipe-delete-fail:
+    text: [ "<red>Failed to delete recipe '<white>{key}</white>'." ]
+    hover: "<gray>This key might not exist, or something went wrong.</gray>"
+    click: "/compressor admin list"
+    clickType: "SUGGEST_COMMAND"
+    components: [ ]
+    prefix: true
+    sound: { type: ENTITY_VILLAGER_NO, volume: 1.0, pitch: 0.8 }
+    particles: [ { type: SMOKE_NORMAL, count: 6, offset: [0.2, 0.4, 0.2], speed: 0.02 } ]
+    bossbar: { text: "<red>Delete Failed", color: "RED", overlay: "PROGRESS", time: 60, progress: 1.0 }
+    actionbar: { text: "<gray>Recipe deletion failed.", duration: 60 }
+    title:
+      text: "<red><bold>Delete Failed</bold></red>"
+      subtitle: "<gray>Could not delete recipe '<white>{key}</white>'."
+      timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
+
+  # 🧪 RECIPE USAGE HINT
+  recipe-usage-hint:
+    text: [ "<gray>Try <yellow>/compressor admin recipe <edit|create|delete> <key></yellow>" ]
+    hover: "<gray>Create, edit, or delete a custom recipe.</gray>"
+    click: "/compressor admin recipe "
+    clickType: "SUGGEST_COMMAND"
+    components:
+      - text: "<aqua>[Recipe Syntax]</aqua>"
+        hover: "<gray>Click to autofill the recipe admin command</gray>"
+        click: "/compressor admin recipe "
+        clickType: "SUGGEST_COMMAND"
+    prefix: true
+    sound: { type: UI_BUTTON_CLICK, volume: 1.0, pitch: 1.0 }
+    particles: [ { type: CRIT, count: 4, offset: [0.1, 0.3, 0.1], speed: 0.01 } ]
+    bossbar: { text: "<yellow>Recipe Usage", color: "YELLOW", overlay: "PROGRESS", time: 60, progress: 0.6 }
+    actionbar: { text: "<gray>Need help? Use the recipe admin syntax.", duration: 60 }
+    title:
+      text: "<light_purple><bold>Recipe Usage</bold></light_purple>"
+      subtitle: "<gray>Use /compressor admin recipe for details."
+      timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
+
+  # ⚠️ SLOT REPLACEMENT REQUIRES ITEM
+  placeholder-requires-item:
+    text: [ "<red>You must hold an item to replace this slot." ]
+    hover: "<gray>This placeholder can't be cleared with an empty hand.</gray>"
+    prefix: true
+    sound: { type: BLOCK_NOTE_BLOCK_BASS, volume: 1.0, pitch: 0.9 }
+    particles: [ { type: SMOKE_NORMAL, count: 3, offset: [0.1, 0.3, 0.1], speed: 0.01 } ]
+    actionbar: { text: "<gray>Hold an item to place it in this slot.", duration: 60 }
+
+  # ❌ INVALID INPUT / OUTPUT ITEMS
+  gui-invalid-items:
+    text: [ "<red>Please set valid input and output items." ]
+    hover: "<gray>Both input and output slots must contain real items.</gray>"
+    prefix: true
+    sound: { type: ENTITY_VILLAGER_NO, volume: 1.0, pitch: 0.8 }
+    bossbar: { text: "<red>Invalid Items", color: "RED", overlay: "PROGRESS", time: 60, progress: 1.0 }
+    actionbar: { text: "<gray>Set input and output items before confirming.", duration: 60 }
+
 # End Of Config :D

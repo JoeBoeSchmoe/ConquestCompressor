@@ -7,61 +7,89 @@
 
 compressions:
 
-  # 🪨 Cobblestone ➜ Compressed Stone
-  cobblestone_to_compressed_stone:
+  stone_to_obsidian:
     enabled: true
     hasItems:
-      material: COBBLESTONE
-      amount: 9
-      itemData:
-        - displayName: "<gray><bold>Refined Cobblestone"
-          lore:
-            - "<gray>Once a humble stone..."
-            - "<yellow>Now it seeks compression glory."
-          customModelData: 101
-          unbreakable: true
-          enchantments:
-            - name: efficiency
-              level: 2
-            - name: unbreaking
-              level: 1
-          nbt:
-            is_compressible: true
-            origin: "stone_age"
-    giveItems:
       material: STONE
+      amount: 12
+      itemData:
+        displayName: "<gray>Condensed Stone"
+        lore:
+          - "<gray>Under immense pressure."
+          - "<dark_gray>Ready to become obsidian."
+        customModelData: 110
+        unbreakable: false
+        enchantments: []
+        nbt:
+          pending_transformation: true
+    giveItems:
+      material: OBSIDIAN
       amount: 1
       itemData:
-        - displayName: "<white><bold>Compressed Stone"
-          lore:
-            - "<gray>Pressed and hardened by science."
-          customModelData: 102
-          unbreakable: false
-          enchantments: [ ]
-          nbt:
-            compressed_by: "auto-system"
+        displayName: "<black><bold>Refined Obsidian"
+        lore:
+          - "<purple>Born of stone and fire."
+        customModelData: 111
+        unbreakable: true
+        enchantments:
+          - name: blast_protection
+            level: 4
+        nbt:
+          origin: "stone_core"
 
-  # 🧱 Stone ➜ Compressed Coal Ore
-  stone_to_compressed_coal_ore:
+  wheat_to_golden_hay:
     enabled: true
     hasItems:
-      material: STONE
-      amount: 9
-      itemData: [ ]
+      material: WHEAT
+      amount: 32
+      itemData:
+        displayName: "<yellow>Rich Wheat"
+        lore:
+          - "<gold>Not your average straw."
+        customModelData: 120
+        unbreakable: false
+        enchantments: []
+        nbt:
+          quality: "premium"
     giveItems:
-      material: COAL_ORE
+      material: HAY_BLOCK
       amount: 1
       itemData:
-        - displayName: "<dark_gray>Compressed Coal Block"
-          lore:
-            - "<gray>So dark, so dense."
-          customModelData: 103
-          unbreakable: true
-          enchantments:
-            - name: fortune
-              level: 3
-          nbt:
-            custom_flag: true
+        displayName: "<gold><bold>Golden Hay Bale"
+        lore:
+          - "<yellow>Perfect for golden stables."
+        customModelData: 121
+        unbreakable: true
+        enchantments: []
+        nbt:
+          gold_infusion: true
+
+  iron_to_block:
+    enabled: true
+    hasItems:
+      material: IRON_INGOT
+      amount: 9
+      itemData:
+        displayName: "<white>Pure Iron"
+        customModelData: 130
+        unbreakable: false
+        enchantments:
+          - name: durability
+            level: 1
+        nbt:
+          smelted_by: "auto-smelter"
+    giveItems:
+      material: IRON_BLOCK
+      amount: 1
+      itemData:
+        displayName: "<white><bold>Compressed Iron Block"
+        lore:
+          - "<gray>Industrial strength."
+        customModelData: 131
+        unbreakable: true
+        enchantments: []
+        nbt:
+          forged: true
 
 # ===================================================
 # 🛠️ Future Expansion Ideas (Commented)

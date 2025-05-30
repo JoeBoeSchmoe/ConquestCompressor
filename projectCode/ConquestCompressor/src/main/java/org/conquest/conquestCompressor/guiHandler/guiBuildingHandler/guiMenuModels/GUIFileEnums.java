@@ -4,6 +4,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.conquest.conquestCompressor.configurationHandler.configurationFiles.CompressorGUIFile;
 import org.conquest.conquestCompressor.configurationHandler.configurationFiles.RecipesGUIFile;
 
+/**
+ * 📁 GUIFileEnums
+ *
+ * Enum to link each GUI type to its corresponding configuration file source.
+ */
 public enum GUIFileEnums {
 
     RECIPES {
@@ -12,6 +17,7 @@ public enum GUIFileEnums {
             return RecipesGUIFile.getConfig();
         }
     },
+
     COMPRESSOR {
         @Override
         public FileConfiguration getConfig() {
@@ -19,5 +25,10 @@ public enum GUIFileEnums {
         }
     };
 
+    /**
+     * Returns the Bukkit config object associated with this menu type.
+     *
+     * @return FileConfiguration instance tied to the enum
+     */
     public abstract FileConfiguration getConfig();
 }

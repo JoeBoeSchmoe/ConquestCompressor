@@ -29,15 +29,15 @@ public class AutoTabManager {
     );
 
     private static final List<String> RECIPE_SUBCOMMANDS = List.of(
-            "editrecipe",
-            "createrecipe",
-            "deleterecipe"
+            "edit",
+            "create",
+            "delete"
     );
 
     private static final List<String> COMPRESSOR_SUBCOMMANDS = List.of(
-            "editcompressor",
-            "createcompressor",
-            "deletecompressor"
+            "edit",
+            "create",
+            "delete"
     );
 
     public static List<String> getSuggestions(@NotNull CommandSender sender, @NotNull String[] args) {
@@ -58,7 +58,7 @@ public class AutoTabManager {
             if (sub.equals("recipe")) {
                 if (args.length == 3) return partialMatch(args[2], RECIPE_SUBCOMMANDS);
 
-                if (args.length == 4 && args[2].equalsIgnoreCase("editrecipe") || args[2].equalsIgnoreCase("deleterecipe")) {
+                if (args.length == 4 && args[2].equalsIgnoreCase("edit") || args[2].equalsIgnoreCase("delete")) {
                     return getRecipeNames();
                 }
             }
@@ -67,7 +67,7 @@ public class AutoTabManager {
             if (sub.equals("compressor")) {
                 if (args.length == 3) return partialMatch(args[2], COMPRESSOR_SUBCOMMANDS);
 
-                if (args.length == 4 && args[2].equalsIgnoreCase("editcompressor") || args[2].equalsIgnoreCase("deletecompressor")) {
+                if (args.length == 4 && args[2].equalsIgnoreCase("edit") || args[2].equalsIgnoreCase("delete")) {
                     return getCompressorNames();
                 }
             }

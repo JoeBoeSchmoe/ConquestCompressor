@@ -55,8 +55,9 @@ public class RecipeManager {
                 Material mat = matStr != null ? Material.matchMaterial(matStr) : null;
                 if (mat != null) layout.put(slotKey, mat);
 
-                List<Map<?, ?>> rawItemData = slot.getMapList("itemData");
-                ItemDataModel dataModel = ItemDataModel.fromList(rawItemData);
+                ConfigurationSection itemDataSection = slot.getConfigurationSection("itemData");
+                Map<String, Object> rawItemData = itemDataSection != null ? itemDataSection.getValues(true) : null;
+                ItemDataModel dataModel = ItemDataModel.deserialize(rawItemData);
                 if (dataModel != null) layoutItemData.put(slotKey, dataModel);
             }
 
@@ -66,8 +67,10 @@ public class RecipeManager {
             String resultMatStr = given.getString("material");
             Material resultMat = resultMatStr != null ? Material.matchMaterial(resultMatStr) : null;
             int resultAmt = given.getInt("amount", 1);
-            List<Map<?, ?>> resultRawData = given.getMapList("itemData");
-            ItemDataModel resultData = ItemDataModel.fromList(resultRawData);
+
+            ConfigurationSection resultDataSection = given.getConfigurationSection("itemData");
+            Map<String, Object> resultRawData = resultDataSection != null ? resultDataSection.getValues(true) : null;
+            ItemDataModel resultData = ItemDataModel.deserialize(resultRawData);
 
             if (resultMat == null) {
                 log.warning("⚠️  Invalid result material in recipe '" + key + "'");

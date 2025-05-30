@@ -13,13 +13,10 @@ description: >
   A utility plugin that optimizes spawner functionality and performance
   through smart compression logic. Includes admin commands and full config support.
 
-# Hard Dependencies
-depend:
-  - Vault
-
 # Optional Dependencies
 softdepend:
   - PlaceholderAPI
+  - Vault
 
 # ===================================================
 # 🧭 Commands
@@ -51,6 +48,14 @@ permissions:
     description: Reload the plugin's configuration files
     default: op
 
+  conquestcompressor.admin.compressor:
+    description: Edit, create, or delete compressor recipes
+    default: op
+
+  conquestcompressor.admin.recipe:
+    description: Edit, create, or delete crafting recipes
+    default: op
+
   conquestcompressor.admin.*:
     description: Grants full access to all ConquestCompressor admin commands
     default: op
@@ -58,3 +63,15 @@ permissions:
       conquestcompressor.admin.basecommand: true
       conquestcompressor.admin.help: true
       conquestcompressor.admin.reload: true
+      conquestcompressor.admin.compressor: true
+      conquestcompressor.admin.recipe: true
+
+  conquestcompressor.user.auto:
+    description: Allows use of automatic compression features
+    default: true
+
+  conquestcompressor.user.*:
+    description: Grants access to all user-level compressor features
+    default: true
+    children:
+      conquestcompressor.user.auto: true

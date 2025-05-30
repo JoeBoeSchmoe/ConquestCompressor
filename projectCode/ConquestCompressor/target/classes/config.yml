@@ -77,7 +77,26 @@ gui-settings:
 compression:
   max-stack-size: 64           # Max items per compressed stack
   allow-auto-compress: true    # Toggle for automatic compression on pickup
-  log-compression-events: true # Enable debug/info logs for compression tasks
+
+# ===================================================
+# 🔁 Auto Compression Trigger
+# Controls when the auto compressor checks player inventories.
+# Accepts:
+#   • Duration values like: "1500ms", "45s", "2m"
+#   • Special triggers:
+#     - ON_ITEM_PICKUP
+#     - ON_CONTAINER_INVENTORY_OPEN
+#     - ON_CONTAINER_INVENTORY_CLOSE
+#     - ON_SHIFT_LEFT_CLICK
+#     - ON_SHIFT_RIGHT_CLICK
+#
+# Unit Guide:
+#   - ms = milliseconds
+#   - s = seconds
+#   - m = minutes
+# ===================================================
+auto-compress-interval: "5s"
+
 
 # ===================================================
 # 🎟️ Permission Voucher Item

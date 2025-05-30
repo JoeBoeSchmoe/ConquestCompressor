@@ -5,6 +5,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.EditingSessionManager;
 import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.EditorMenuManager;
+import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.guiMenuManagers.CompressorGUIManager;
+import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.guiMenuManagers.RecipesGUIManager;
 import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.guiMenuModels.DuelMenuMeta;
 import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.guiMenuModels.EffectModel;
 import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.guiMenuModels.FillerItemModel;
@@ -22,17 +24,11 @@ public class GUIOpener {
 
     public static void open(Player player, GUIFileEnums type) {
         ensureMetaBuilt(type);
-
         EditingSessionManager.getOrCreate(player).touch();
 
-        // Delegated GUI open call — you'll plug in actual menu managers later
         switch (type) {
-            case COMPRESSOR -> {
-                // TODO: CompressorMenuManager.open(player);
-            }
-            case RECIPES -> {
-                // TODO: RecipeEditorMenuManager.open(player);
-            }
+            case COMPRESSOR -> CompressorGUIManager.open(player);
+            case RECIPES -> RecipesGUIManager.open(player);
         }
     }
 
@@ -43,7 +39,7 @@ public class GUIOpener {
 
         String title = config.getString("menu.title", "<gray>Menu");
         boolean usesFiller = config.getBoolean("menu.filler", true);
-        int rows = config.getInt("menu.rows-per-page", 1); // Default to 1 if missing
+        int rows = Math.min(6, Math.max(1, config.getInt("menu.rows-per-page", 1)));
 
         List<Map<String, Object>> layout = new ArrayList<>();
         if (config.isList("menu.layout")) {

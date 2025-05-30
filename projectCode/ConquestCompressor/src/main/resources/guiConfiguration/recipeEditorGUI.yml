@@ -7,7 +7,7 @@
 menu:
   title: "<dark_gray>Recipe Editor"
   filler: true
-  rows-per-page: 5 # Minimum Of 1 Enforced (Maximum Of 6)
+  rows-per-page: 6 # Minimum Of 1 Enforced (Maximum Of 6)
 
   filler-item:
     material: BLACK_STAINED_GLASS_PANE
@@ -131,7 +131,7 @@ menu:
       material: AIR
 
     # 🎯 Output Result Slot (On Create, EDIT shows current output)
-    - slot: 16
+    - slot: 24
       action: output
       material: HOPPER
       amount: 1
@@ -144,7 +144,7 @@ menu:
 
     # ❌ Cancel Buttons (Redstone Blocks)
     - action: cancel
-      slot: 36
+      slot: 46
       material: REDSTONE_BLOCK
       amount: 1
       name: "<red>✖ Cancel"
@@ -156,7 +156,7 @@ menu:
         CustomModelData: 1302
 
     - action: cancel
-      slot: 37
+      slot: 47
       material: REDSTONE_BLOCK
       amount: 1
       name: "<red>✖ Cancel"
@@ -168,7 +168,7 @@ menu:
         CustomModelData: 1302
 
     - action: cancel
-      slot: 38
+      slot: 48
       material: REDSTONE_BLOCK
       amount: 1
       name: "<red>✖ Cancel"
@@ -181,7 +181,7 @@ menu:
 
     # ✅ Confirm Buttons (Emerald Blocks)
     - action: confirm
-      slot: 42
+      slot: 50
       material: EMERALD_BLOCK
       amount: 1
       name: "<green>✔ Save Recipe"
@@ -193,7 +193,7 @@ menu:
         CustomModelData: 1301
 
     - action: confirm
-      slot: 43
+      slot: 51
       material: EMERALD_BLOCK
       amount: 1
       name: "<green>✔ Save Recipe"
@@ -205,7 +205,7 @@ menu:
         CustomModelData: 1301
 
     - action: confirm
-      slot: 44
+      slot: 52
       material: EMERALD_BLOCK
       amount: 1
       name: "<green>✔ Save Recipe"

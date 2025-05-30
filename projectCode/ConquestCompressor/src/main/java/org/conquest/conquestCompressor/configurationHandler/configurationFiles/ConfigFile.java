@@ -2,6 +2,8 @@ package org.conquest.conquestCompressor.configurationHandler.configurationFiles;
 
 import org.conquest.conquestCompressor.ConquestCompressor;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.conquest.conquestCompressor.compressingHandler.AutoCompressTrigger;
+
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -74,5 +76,10 @@ public class ConfigFile {
 
     public static double getDouble(String path, double def) {
         return config != null ? config.getDouble(path, def) : def;
+    }
+
+    public static AutoCompressTrigger getCompressTrigger() {
+        String raw = getString("auto-compress-interval");
+        return AutoCompressTrigger.fromConfig(raw);
     }
 }

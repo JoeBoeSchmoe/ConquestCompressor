@@ -6,17 +6,24 @@ package org.conquest.conquestCompressor.commandHandler.permissionHandler;
  */
 public enum PermissionModels {
 
+    // ─────────────────────────────────────────────
     // 🎮 User Permissions
-    USER_BASE("conquestspawners.user.base"),
-    USER_HELP("conquestspawners.user.help"),
-    USER_GIVE("conquestspawners.user.give"),
-    USER_INFO("conquestspawners.user.info"),
+    // ─────────────────────────────────────────────
+    USER_AUTO("conquestcompressor.user.auto"),
+    USER_ALL("conquestcompressor.user.*"),
 
-    // 🛠 Admin Permissions
-    ADMIN_BASE("conquestspawners.admin"),
-    ADMIN_RELOAD("conquestspawners.admin.reload"),
-    ADMIN_GIVE("conquestspawners.admin.give"),
-    ADMIN_ALL("conquestspawners.admin.*");
+    // ─────────────────────────────────────────────
+    // 🛠 Admin Base & Wildcard
+    // ─────────────────────────────────────────────
+    ADMIN_BASE("conquestcompressor.admin"),
+    ADMIN_ALL("conquestcompressor.admin.*"),
+
+    // ─────────────────────────────────────────────
+    // 🔁 Admin Subcommand Permissions
+    // ─────────────────────────────────────────────
+    ADMIN_RELOAD("conquestcompressor.admin.reload"),
+    ADMIN_COMPRESSOR("conquestcompressor.admin.compressor"),
+    ADMIN_RECIPE("conquestcompressor.admin.recipe");
 
     private final String node;
 
@@ -24,6 +31,9 @@ public enum PermissionModels {
         this.node = node;
     }
 
+    /**
+     * Returns the full permission string.
+     */
     public String getNode() {
         return node;
     }

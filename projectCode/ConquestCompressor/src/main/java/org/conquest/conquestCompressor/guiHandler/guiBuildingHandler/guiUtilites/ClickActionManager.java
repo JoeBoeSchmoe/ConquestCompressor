@@ -6,6 +6,8 @@ import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.guiMenuMode
 import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.guiMenuModels.DuelMenuMeta;
 import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.guiMenuModels.GUIFileEnums;
 
+import java.util.Map;
+
 /**
  * 🖱️ ClickActionManager
  *
@@ -38,5 +40,22 @@ public class ClickActionManager {
                 player.sendMessage("⚠️ Unknown action: " + action);
             }
         }
+    }
+
+    public static String getActionForSlot(int slot, DuelMenuMeta meta) {
+        if (meta == null || meta.getLayout() == null) return null;
+
+        for (Map<String, Object> entry : meta.getLayout()) {
+            Object rawSlot = entry.get("slot");
+            Object rawAction = entry.get("action");
+
+            if (rawSlot instanceof Integer && rawAction instanceof String) {
+                if ((int) rawSlot == slot) {
+                    return ((String) rawAction).toLowerCase();
+                }
+            }
+        }
+
+        return null;
     }
 }
