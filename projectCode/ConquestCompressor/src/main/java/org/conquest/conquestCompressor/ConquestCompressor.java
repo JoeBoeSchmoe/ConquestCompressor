@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.conquest.conquestCompressor.commandHandler.CommandManager;
 import org.conquest.conquestCompressor.compressingHandler.CompressorListener;
 import org.conquest.conquestCompressor.configurationHandler.ConfigurationManager;
+import org.conquest.conquestCompressor.functionalHandler.compressorHandler.CompressorManager;
 import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.EditGUIListener;
 import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.EditingSessionManager;
 import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.EditorMenuManager;
@@ -85,6 +86,10 @@ public final class ConquestCompressor extends JavaPlugin {
         configurationManager.initialize();
         EditorMenuManager.reload();
 
+        // 🔁 Reload compressor recipes
+        CompressorManager.clear();
+        CompressorManager.load();
+
         // 🔁 Unregister old listeners first
         HandlerList.unregisterAll(this);
 
@@ -99,6 +104,7 @@ public final class ConquestCompressor extends JavaPlugin {
 
         getLogger().info("✅  Reload complete.");
     }
+
 
     /**
      * Registers main command and aliases.

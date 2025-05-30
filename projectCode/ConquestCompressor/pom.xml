@@ -48,6 +48,12 @@
             <id>citizens-repo</id>
             <url>https://repo.citizensnpcs.co/</url>
         </repository>
+
+        <!-- 📦 Mojang AuthLib (for GameProfile and Property) -->
+        <repository>
+            <id>mojang-authlib</id>
+            <url>https://libraries.minecraft.net/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -67,7 +73,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- 📘 PlaceholderAPI (for dynamic placeholders) -->
+        <!-- 📘 PlaceholderAPI -->
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
@@ -75,7 +81,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- 👤 Citizens API (commented for optional use) -->
+        <!-- 👤 Citizens (optional) -->
         <!--
         <dependency>
             <groupId>net.citizensnpcs</groupId>
@@ -84,6 +90,14 @@
             <scope>provided</scope>
         </dependency>
         -->
+
+        <!-- 🧠 Mojang AuthLib for skull textures -->
+        <dependency>
+            <groupId>com.mojang</groupId>
+            <artifactId>authlib</artifactId>
+            <version>1.5.25</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>

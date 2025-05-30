@@ -35,6 +35,7 @@ org\conquest\conquestCompressor\guiHandler\guiBuildingHandler\EditingSessionMana
 org\conquest\conquestCompressor\compressingHandler\CompressorListener.class
 org\conquest\conquestCompressor\commandHandler\permissionHandler\PermissionModels.class
 org\conquest\conquestCompressor\guiHandler\guiBuildingHandler\guiMenuModels\GUIFileEnums$2.class
+org\conquest\conquestCompressor\functionalHandler\SkullTextureResolver.class
 org\conquest\conquestCompressor\guiHandler\GUIOpener.class
 org\conquest\conquestCompressor\configurationHandler\integrationFiles\VaultManager.class
 org\conquest\conquestCompressor\configurationHandler\configurationFiles\RecipesGUIFile.class

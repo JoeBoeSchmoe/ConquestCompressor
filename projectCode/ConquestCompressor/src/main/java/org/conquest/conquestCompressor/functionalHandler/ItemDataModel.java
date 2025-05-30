@@ -6,8 +6,10 @@ import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.conquest.conquestCompressor.ConquestCompressor;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,6 +28,8 @@ public class ItemDataModel implements ConfigurationSerializable {
     private List<EnchantmentDataModel> enchantments;
     private Boolean unbreakable;
     private Map<String, Object> nbt;
+    private List<String> itemFlags;
+    private String skullTextureBase64;
 
     public ItemDataModel() {}
 
@@ -45,6 +49,16 @@ public class ItemDataModel implements ConfigurationSerializable {
         this.nbt = nbt;
     }
 
+    public ItemDataModel withItemFlags(List<String> flags) {
+        this.itemFlags = flags;
+        return this;
+    }
+
+    public ItemDataModel withSkullTexture(String base64) {
+        this.skullTextureBase64 = base64;
+        return this;
+    }
+
     public static ItemDataModel fromItem(ItemStack item) {
         if (item == null || !item.hasItemMeta()) return null;
 
@@ -53,12 +67,14 @@ public class ItemDataModel implements ConfigurationSerializable {
 
         MiniMessage mini = MiniMessage.miniMessage();
 
-        String displayName = meta.displayName() != null ? mini.serialize(Objects.requireNonNull(meta.displayName())) : null;
+        String displayName = meta.displayName() != null
+                ? mini.serialize(Objects.requireNonNull(meta.displayName()))
+                : null;
 
         List<String> lore = null;
         if (meta.lore() != null) {
             lore = new ArrayList<>();
-            for (Component line : Objects.requireNonNull(meta.lore())) {
+            for (Component line : meta.lore()) {
                 lore.add(mini.serialize(line));
             }
         }
@@ -72,9 +88,27 @@ public class ItemDataModel implements ConfigurationSerializable {
         }
 
         Map<String, Object> fakeNBT = new HashMap<>();
-        fakeNBT.put("placeholder", true); // Replace with real NBT if needed
+        fakeNBT.put("placeholder", true);
 
-        return new ItemDataModel(displayName, lore, modelData, enchantList, unbreakable, fakeNBT);
+        List<String> flags = new ArrayList<>();
+        for (ItemFlag flag : meta.getItemFlags()) {
+            flags.add(flag.name());
+        }
+
+        String base64Texture = null;
+        if (item.getType() == Material.PLAYER_HEAD && meta instanceof SkullMeta skullMeta) {
+            base64Texture = SkullTextureResolver.extractTextureFromMeta(skullMeta);
+
+            if (base64Texture != null) {
+                ConquestCompressor.getInstance().getLogger().info("🧠 Extracted skull texture: " + base64Texture.substring(0, Math.min(30, base64Texture.length())) + "...");
+            } else {
+                ConquestCompressor.getInstance().getLogger().warning("⚠️ No skull texture found during fromItem()");
+            }
+        }
+
+        return new ItemDataModel(displayName, lore, modelData, enchantList, unbreakable, fakeNBT)
+                .withItemFlags(flags)
+                .withSkullTexture(base64Texture);
     }
 
     @Override
@@ -86,8 +120,9 @@ public class ItemDataModel implements ConfigurationSerializable {
         map.put("customModelData", customModelData);
         map.put("unbreakable", unbreakable);
         map.put("nbt", nbt != null ? nbt : new HashMap<>());
+        map.put("itemFlags", itemFlags != null ? itemFlags : Collections.emptyList());
+        map.put("skullTexture", skullTextureBase64); // ✅ Only include texture
 
-        // ✨ Normalize enchantments to a clean YAML-safe list
         if (enchantments != null && !enchantments.isEmpty()) {
             List<Map<String, Object>> serialized = new ArrayList<>();
             for (EnchantmentDataModel enchant : enchantments) {
@@ -101,7 +136,6 @@ public class ItemDataModel implements ConfigurationSerializable {
         return map;
     }
 
-    @SuppressWarnings("unchecked")
     public static ItemDataModel deserialize(Map<String, Object> map) {
         if (map == null) return null;
 
@@ -140,8 +174,6 @@ public class ItemDataModel implements ConfigurationSerializable {
                             safeMap.put(key, e.getValue());
                         }
                     }
-
-                    // Handle missing Bukkit class path manually
                     try {
                         enchantments.add(EnchantmentDataModel.deserialize(safeMap));
                     } catch (Exception ex) {
@@ -156,21 +188,37 @@ public class ItemDataModel implements ConfigurationSerializable {
             }
         }
 
-        return new ItemDataModel(displayName, lore, customModelData, enchantments, unbreakable, nbt);
+        List<String> flags = null;
+        if (map.get("itemFlags") instanceof List<?> rawFlags) {
+            flags = new ArrayList<>();
+            for (Object f : rawFlags) {
+                if (f instanceof String s) flags.add(s);
+            }
+        }
+
+        String skullTexture = (map.get("skullTexture") instanceof String s) ? s : null;
+
+        return new ItemDataModel(displayName, lore, customModelData, enchantments, unbreakable, nbt)
+                .withItemFlags(flags)
+                .withSkullTexture(skullTexture); // ✅ skullOwner is not used at all
     }
 
     public boolean matches(ItemStack item) {
         if (item == null || !item.hasItemMeta()) return false;
 
         ItemMeta meta = item.getItemMeta();
+        if (meta == null) return false;
+
         MiniMessage mini = MiniMessage.miniMessage();
 
+        // ✅ Check display name
         if (displayName != null) {
             Component actualName = meta.displayName();
             String actualSerialized = actualName != null ? mini.serialize(actualName) : "";
             if (!displayName.equals(actualSerialized)) return false;
         }
 
+        // ✅ Check lore
         if (lore != null && !lore.isEmpty()) {
             List<Component> actualLore = meta.lore();
             if (actualLore == null || actualLore.size() != lore.size()) return false;
@@ -179,14 +227,15 @@ public class ItemDataModel implements ConfigurationSerializable {
             }
         }
 
-        if (customModelData != null && (!meta.hasCustomModelData() || meta.getCustomModelData() != customModelData)) {
-            return false;
+        // ✅ Check model data
+        if (customModelData != null) {
+            if (!meta.hasCustomModelData() || meta.getCustomModelData() != customModelData) return false;
         }
 
-        if (unbreakable != null && meta.isUnbreakable() != unbreakable) {
-            return false;
-        }
+        // ✅ Check unbreakable
+        if (unbreakable != null && meta.isUnbreakable() != unbreakable) return false;
 
+        // ✅ Check enchantments
         if (enchantments != null && !enchantments.isEmpty()) {
             for (EnchantmentDataModel expected : enchantments) {
                 Enchantment ench = Enchantment.getByKey(org.bukkit.NamespacedKey.minecraft(expected.getName()));
@@ -196,8 +245,33 @@ public class ItemDataModel implements ConfigurationSerializable {
             }
         }
 
+        // ✅ Check item flags
+        if (itemFlags != null && !itemFlags.isEmpty()) {
+            for (String flagName : itemFlags) {
+                try {
+                    ItemFlag flag = ItemFlag.valueOf(flagName);
+                    if (!meta.hasItemFlag(flag)) return false;
+                } catch (IllegalArgumentException e) {
+                    // unknown flag, treat as mismatch
+                    return false;
+                }
+            }
+        }
+
+        // ✅ Check skull texture without recursive fromItem() call
+        if (skullTextureBase64 != null && item.getType() == Material.PLAYER_HEAD && meta instanceof SkullMeta skullMeta) {
+            String actualTexture = SkullTextureResolver.extractTextureFromMeta(skullMeta);
+            if (actualTexture == null || !skullTextureBase64.equals(actualTexture)) {
+                return false;
+            }
+        }
+
+        // ✅ Simulated NBT comparison (minimal)
         if (nbt != null && !nbt.isEmpty()) {
-            Map<String, Object> fakeTag = fromItem(item).getNbt();
+            // Note: Avoid full fromItem() call — simulate as much as needed
+            Map<String, Object> fakeTag = new HashMap<>();
+            fakeTag.put("placeholder", true);
+
             for (Map.Entry<String, Object> entry : nbt.entrySet()) {
                 if (!Objects.equals(fakeTag.get(entry.getKey()), entry.getValue())) return false;
             }
@@ -205,6 +279,7 @@ public class ItemDataModel implements ConfigurationSerializable {
 
         return true;
     }
+
 
     public static int countMatching(Inventory inventory, Material material, ItemDataModel dataModel) {
         int count = 0;
@@ -242,7 +317,12 @@ public class ItemDataModel implements ConfigurationSerializable {
 
         MiniMessage mini = MiniMessage.miniMessage();
 
-        if (displayName != null) meta.displayName(mini.deserialize(displayName));
+        // ✅ Apply Display Name
+        if (displayName != null) {
+            meta.displayName(mini.deserialize(displayName));
+        }
+
+        // ✅ Apply Lore
         if (lore != null && !lore.isEmpty()) {
             List<Component> loreComponents = new ArrayList<>();
             for (String line : lore) {
@@ -250,21 +330,47 @@ public class ItemDataModel implements ConfigurationSerializable {
             }
             meta.lore(loreComponents);
         }
-        if (customModelData != null) meta.setCustomModelData(customModelData);
-        if (unbreakable != null) meta.setUnbreakable(unbreakable);
 
+        // ✅ Apply Custom Model Data and Unbreakable
+        if (customModelData != null) {
+            meta.setCustomModelData(customModelData);
+        }
+
+        if (unbreakable != null) {
+            meta.setUnbreakable(unbreakable);
+        }
+
+        // ✅ Apply Enchantments
         if (enchantments != null) {
             for (EnchantmentDataModel enchant : enchantments) {
                 Enchantment ench = Enchantment.getByKey(org.bukkit.NamespacedKey.minecraft(enchant.getName()));
                 if (ench != null) {
                     meta.addEnchant(ench, enchant.getLevel(), true);
                 } else {
-                    ConquestCompressor.getInstance().getLogger().warning("⚠️ Unknown enchantment: " + enchant.getName());
+                    ConquestCompressor.getInstance().getLogger().warning("⚠️  Unknown enchantment: " + enchant.getName());
                 }
             }
         }
 
+        // ✅ Apply Item Flags
+        if (itemFlags != null) {
+            for (String flagName : itemFlags) {
+                try {
+                    ItemFlag flag = ItemFlag.valueOf(flagName);
+                    meta.addItemFlags(flag);
+                } catch (IllegalArgumentException e) {
+                    ConquestCompressor.getInstance().getLogger().warning("⚠️  Unknown ItemFlag: " + flagName);
+                }
+            }
+        }
+
+        // ✅ Apply meta now
         item.setItemMeta(meta);
+
+        // ✅ Apply Skull Texture AFTER meta is set
+        if (item.getType() == Material.PLAYER_HEAD && skullTextureBase64 != null) {
+            SkullTextureResolver.applyTexture(item, skullTextureBase64);
+        }
     }
 
     public String getDisplayName() {

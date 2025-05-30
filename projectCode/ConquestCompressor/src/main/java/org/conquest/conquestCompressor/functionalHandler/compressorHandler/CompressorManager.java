@@ -22,10 +22,18 @@ public class CompressorManager {
     }
 
     /**
-     * Loads and parses all compressor recipes into memory.
+     * Clears all in-memory compressor recipes.
+     */
+    public static void clear() {
+        compressorRecipes.clear();
+    }
+
+    /**
+     * Reloads and parses all compressor recipes into memory.
+     * Calls clear() before repopulating.
      */
     public static void load() {
-        compressorRecipes.clear();
+        clear();
         ConfigurationSection root = GameAutocompressorFile.getConfig().getConfigurationSection("compressions");
 
         if (root == null) {
@@ -33,6 +41,7 @@ public class CompressorManager {
             return;
         }
 
+        int count = 0;
         for (String key : root.getKeys(false)) {
             ConfigurationSection section = root.getConfigurationSection(key);
             if (section == null) continue;
@@ -40,35 +49,41 @@ public class CompressorManager {
             boolean enabled = section.getBoolean("enabled", true);
             if (!enabled) continue;
 
-            // ─── Input ────────────────────────────────────────
+            // ─── Input ─────────────────────
             ConfigurationSection hasItems = section.getConfigurationSection("hasItems");
             if (hasItems == null) {
-                return;
+                log.warning("⚠️  Missing hasItems section in '" + key + "'");
+                continue;
             }
-            String inputMatStr = hasItems.getString("material");
-            Material inputMat = inputMatStr != null ? Material.matchMaterial(inputMatStr) : null;
+
+            Material inputMat = Material.matchMaterial(hasItems.getString("material", ""));
             int inputAmt = hasItems.getInt("amount", 1);
 
-            ConfigurationSection inputDataSection = hasItems.getConfigurationSection("itemData");
-            Map<String, Object> inputRawData = inputDataSection != null ? inputDataSection.getValues(true) : null;
-            ItemDataModel inputData = ItemDataModel.deserialize(inputRawData);
+            ItemDataModel inputData = null;
+            if (hasItems.contains("itemData")) {
+                ConfigurationSection inputDataSection = hasItems.getConfigurationSection("itemData");
+                inputData = inputDataSection != null ? ItemDataModel.deserialize(inputDataSection.getValues(false)) : null;
+            }
 
-            // ─── Output ───────────────────────────────────────
+            // ─── Output ────────────────────
             ConfigurationSection giveItems = section.getConfigurationSection("giveItems");
             if (giveItems == null) {
-                return;
+                log.warning("⚠️  Missing giveItems section in '" + key + "'");
+                continue;
             }
-            String outputMatStr = giveItems.getString("material");
-            Material outputMat = outputMatStr != null ? Material.matchMaterial(outputMatStr) : null;
+
+            Material outputMat = Material.matchMaterial(giveItems.getString("material", ""));
             int outputAmt = giveItems.getInt("amount", 1);
 
-            ConfigurationSection outputDataSection = giveItems.getConfigurationSection("itemData");
-            Map<String, Object> outputRawData = outputDataSection != null ? outputDataSection.getValues(true) : null;
-            ItemDataModel outputData = ItemDataModel.deserialize(outputRawData);
+            ItemDataModel outputData = null;
+            if (giveItems.contains("itemData")) {
+                ConfigurationSection outputDataSection = giveItems.getConfigurationSection("itemData");
+                outputData = outputDataSection != null ? ItemDataModel.deserialize(outputDataSection.getValues(false)) : null;
+            }
 
-            // ─── Validation ───────────────────────────────────
+            // ─── Validation ────────────────
             if (inputMat == null || outputMat == null) {
-                log.warning("⚠️  Invalid material in compression recipe '" + key + "'");
+                log.warning("⚠️  Invalid material(s) in compressor '" + key + "'");
                 continue;
             }
 
@@ -79,47 +94,36 @@ public class CompressorManager {
                     outputMat, outputAmt, outputData
             );
 
-            compressorRecipes.put(key, model);
+            register(model);
+            count++;
         }
 
-        log.info("✅  Loaded " + compressorRecipes.size() + " compressor recipe(s). ✔");
+        log.info("✅  Loaded " + count + " compressor recipe(s).");
     }
 
     /**
-     * Gets all loaded compression recipes.
+     * Registers a compressor model at runtime.
      */
-    public static Collection<CompressorModel> getAllRecipes() {
-        return compressorRecipes.values();
+    public static void register(CompressorModel model) {
+        if (model == null || model.getKey() == null) {
+            log.warning("⚠️  Tried to register null model or null key.");
+            return;
+        }
+        compressorRecipes.put(model.getKey(), model);
     }
 
     /**
-     * Gets a recipe by key.
+     * Deletes a compressor by key from memory and config.
      */
-    public static CompressorModel getRecipe(String key) {
-        return compressorRecipes.get(key);
-    }
-
-    /**
-     * Checks if any recipes are loaded.
-     */
-    public static boolean isEmpty() {
-        return compressorRecipes.isEmpty();
-    }
-
     public static boolean deleteRecipe(String key) {
-        if (!compressorRecipes.containsKey(key)) {
-            return false;
-        }
-
-        // Remove from in-memory map
+        if (!compressorRecipes.containsKey(key)) return false;
         compressorRecipes.remove(key);
 
-        // Remove from config and save
         ConfigurationSection root = GameAutocompressorFile.getConfig().getConfigurationSection("compressions");
         if (root != null && root.contains(key)) {
             root.set(key, null);
-            GameAutocompressorFile.save(); // Persist deletion
-            log.info("🗑️ Deleted compressor recipe '" + key + "'");
+            GameAutocompressorFile.save();
+            log.info("🗑️ Deleted compressor recipe: " + key);
             return true;
         }
 
@@ -127,16 +131,30 @@ public class CompressorManager {
     }
 
     /**
-     * Registers a new compressor recipe at runtime.
+     * Gets all compressor models.
      */
-    public static void register(CompressorModel model) {
-        if (model == null || model.getKey() == null) {
-            log.warning("⚠️  Tried to register null compressor model or model with null key.");
-            return;
-        }
-
-        compressorRecipes.put(model.getKey(), model);
-        //log.info("➕ Registered compressor recipe: " + model.getKey());
+    public static Collection<CompressorModel> getAllRecipes() {
+        return compressorRecipes.values();
     }
 
+    /**
+     * Gets a compressor model by key.
+     */
+    public static CompressorModel getRecipe(String key) {
+        return compressorRecipes.get(key);
+    }
+
+    /**
+     * Checks if the manager is empty.
+     */
+    public static boolean isEmpty() {
+        return compressorRecipes.isEmpty();
+    }
+
+    /**
+     * Checks if a key is registered.
+     */
+    public static boolean exists(String key) {
+        return compressorRecipes.containsKey(key);
+    }
 }
