@@ -66,6 +66,17 @@ public class EditingSessionManager {
         }
     }
 
+    public static void closeAllSync() {
+        for (UUID uuid : sessions.keySet()) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player != null && player.isOnline()) {
+                player.closeInventory(); // ✅ Do this immediately (no scheduler)
+            }
+        }
+        sessions.clear(); // 🧹 Optional: clean up session map
+    }
+
+
     public static void expireInactiveSessions(long timeoutMillis) {
         long now = System.currentTimeMillis();
         Set<UUID> expired = new HashSet<>();

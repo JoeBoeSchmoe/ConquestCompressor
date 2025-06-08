@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.conquest.conquestCompressor.commandHandler.CommandManager;
 import org.conquest.conquestCompressor.compressingHandler.CompressorListener;
+import org.conquest.conquestCompressor.compressingHandler.PlayerStateListener;
 import org.conquest.conquestCompressor.configurationHandler.ConfigurationManager;
 import org.conquest.conquestCompressor.functionalHandler.compressorHandler.CompressorManager;
 import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.EditGUIListener;
@@ -44,7 +45,8 @@ public final class ConquestCompressor extends JavaPlugin {
         // 🎧 Register listeners
         registerListeners(
                 new EditGUIListener(),
-                new CompressorListener()
+                new CompressorListener(),
+                new PlayerStateListener()
         );
 
         // 🧠 Start interval-based compression if enabled
@@ -58,7 +60,7 @@ public final class ConquestCompressor extends JavaPlugin {
         getLogger().info("📦  Saving plugin state...");
 
         // ❌ Close sessions and clear memory
-        EditingSessionManager.closeAll();
+        EditingSessionManager.closeAllSync();
         EditingSessionManager.clear();
 
         EditorMenuManager.clear();
