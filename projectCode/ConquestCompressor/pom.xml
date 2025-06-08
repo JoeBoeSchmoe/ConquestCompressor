@@ -65,14 +65,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- 💰 Vault API (optional integration) -->
-        <dependency>
-            <groupId>net.milkbowl.vault</groupId>
-            <artifactId>VaultAPI</artifactId>
-            <version>1.7</version>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- 📘 PlaceholderAPI -->
         <dependency>
             <groupId>me.clip</groupId>

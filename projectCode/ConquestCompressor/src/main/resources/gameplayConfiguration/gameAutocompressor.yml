@@ -8,7 +8,7 @@
 compressions:
 
   stone_to_obsidian:
-    enabled: true
+    enabled: false
     hasItems:
       material: STONE
       amount: 12
@@ -38,7 +38,7 @@ compressions:
           origin: "stone_core"
 
   wheat_to_golden_hay:
-    enabled: true
+    enabled: false
     hasItems:
       material: WHEAT
       amount: 32
@@ -65,7 +65,7 @@ compressions:
           gold_infusion: true
 
   iron_to_block:
-    enabled: true
+    enabled: false
     hasItems:
       material: IRON_INGOT
       amount: 9
@@ -74,7 +74,7 @@ compressions:
         customModelData: 130
         unbreakable: false
         enchantments:
-          - name: durability
+          - name: unbreaking
             level: 1
         nbt:
           smelted_by: "auto-smelter"

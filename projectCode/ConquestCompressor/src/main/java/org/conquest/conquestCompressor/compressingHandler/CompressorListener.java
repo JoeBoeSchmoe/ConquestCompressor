@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.conquest.conquestCompressor.ConquestCompressor;
+import org.conquest.conquestCompressor.commandHandler.subcommandHandler.UserCommands;
 import org.conquest.conquestCompressor.configurationHandler.configurationFiles.ConfigFile;
 import org.conquest.conquestCompressor.functionalHandler.ItemDataModel;
 import org.conquest.conquestCompressor.functionalHandler.compressorHandler.CompressorManager;
@@ -21,12 +22,7 @@ import org.conquest.conquestCompressor.functionalHandler.compressorHandler.Compr
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.logging.Logger;
-
-import static org.bukkit.event.block.Action.LEFT_CLICK_AIR;
-import static org.bukkit.event.block.Action.LEFT_CLICK_BLOCK;
-import static org.bukkit.event.block.Action.RIGHT_CLICK_AIR;
-import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
+import java.util.List;
 
 /**
  * 🧠 CompressorListener
@@ -35,8 +31,6 @@ import static org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK;
 public class CompressorListener implements Listener {
 
     private static final Plugin plugin = ConquestCompressor.getInstance();
-    private static final Logger log = plugin.getLogger();
-
     private static boolean intervalTaskInitialized = false;
 
     public static void initializeAutoCompression() {
@@ -51,7 +45,7 @@ public class CompressorListener implements Listener {
                 @Override
                 public void run() {
                     for (Player player : Bukkit.getOnlinePlayers()) {
-                        if (player.hasPermission("conquestcompressor.user.auto")) {
+                        if (shouldCompress(player)) {
                             compress(player);
                         }
                     }
@@ -59,13 +53,8 @@ public class CompressorListener implements Listener {
             }.runTaskTimer(plugin, delayTicks, delayTicks);
 
             intervalTaskInitialized = true;
-            // log.info("🕒 Auto compression scheduled every " + trigger.getIntervalMillis() + "ms");
-        } else {
-            // log.info("🎯 Auto compression using event: " + trigger.getEventKey());
-            // Listener is already registered during plugin init
         }
     }
-
 
     @EventHandler
     public void onClick(PlayerInteractEvent event) {
@@ -73,12 +62,12 @@ public class CompressorListener implements Listener {
 
         switch (event.getAction()) {
             case LEFT_CLICK_AIR, LEFT_CLICK_BLOCK -> {
-                if (isEnabled("ON_LEFT_CLICK")) {
+                if (isEnabled("ON_LEFT_CLICK") && shouldCompress(event.getPlayer())) {
                     compress(event.getPlayer());
                 }
             }
             case RIGHT_CLICK_AIR, RIGHT_CLICK_BLOCK -> {
-                if (isEnabled("ON_RIGHT_CLICK")) {
+                if (isEnabled("ON_RIGHT_CLICK") && shouldCompress(event.getPlayer())) {
                     compress(event.getPlayer());
                 }
             }
@@ -88,7 +77,7 @@ public class CompressorListener implements Listener {
     @EventHandler
     public void onItemPickup(EntityPickupItemEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
-        if (!isEnabled("ON_ITEM_PICKUP")) return;
+        if (!isEnabled("ON_ITEM_PICKUP") || !shouldCompress(player)) return;
 
         compress(player);
     }
@@ -96,7 +85,7 @@ public class CompressorListener implements Listener {
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent event) {
         if (!(event.getPlayer() instanceof Player player)) return;
-        if (!isEnabled("ON_CONTAINER_INVENTORY_OPEN")) return;
+        if (!isEnabled("ON_CONTAINER_INVENTORY_OPEN") || !shouldCompress(player)) return;
 
         compress(player);
     }
@@ -104,7 +93,7 @@ public class CompressorListener implements Listener {
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
         if (!(event.getPlayer() instanceof Player player)) return;
-        if (!isEnabled("ON_CONTAINER_INVENTORY_CLOSE")) return;
+        if (!isEnabled("ON_CONTAINER_INVENTORY_CLOSE") || !shouldCompress(player)) return;
 
         compress(player);
     }
@@ -112,8 +101,9 @@ public class CompressorListener implements Listener {
     @EventHandler
     public void onShiftToggle(PlayerToggleSneakEvent event) {
         if (!isEnabled("ON_SHIFT_TOGGLE")) return;
-
-        compress(event.getPlayer());
+        if (shouldCompress(event.getPlayer())) {
+            compress(event.getPlayer());
+        }
     }
 
     @EventHandler
@@ -123,16 +113,20 @@ public class CompressorListener implements Listener {
 
         switch (event.getAction()) {
             case LEFT_CLICK_AIR, LEFT_CLICK_BLOCK -> {
-                if (isEnabled("ON_SHIFT_LEFT_CLICK")) {
+                if (isEnabled("ON_SHIFT_LEFT_CLICK") && shouldCompress(event.getPlayer())) {
                     compress(event.getPlayer());
                 }
             }
             case RIGHT_CLICK_AIR, RIGHT_CLICK_BLOCK -> {
-                if (isEnabled("ON_SHIFT_RIGHT_CLICK")) {
+                if (isEnabled("ON_SHIFT_RIGHT_CLICK") && shouldCompress(event.getPlayer())) {
                     compress(event.getPlayer());
                 }
             }
         }
+    }
+
+    private static boolean shouldCompress(Player player) {
+        return player.hasPermission("conquestcompressor.user.auto") && UserCommands.isAutoCompressEnabled(player);
     }
 
     private boolean isEnabled(String key) {
@@ -141,6 +135,13 @@ public class CompressorListener implements Listener {
     }
 
     public static void compress(Player player) {
+        boolean useWhitelist = ConfigFile.getBoolean("world-restrictions.whitelist-worlds", false);
+        if (useWhitelist) {
+            String worldName = player.getWorld().getName();
+            List<String> allowedWorlds = ConfigFile.getStringList("world-restrictions.allowed-worlds");
+            if (!allowedWorlds.contains(worldName)) return;
+        }
+
         Inventory inv = player.getInventory();
         Collection<CompressorModel> recipes = CompressorManager.getAllRecipes();
 
@@ -161,44 +162,24 @@ public class CompressorListener implements Listener {
                 ItemStack outputItem = recipe.buildOutputItem();
                 outputItem.setAmount(totalOutput);
 
-                // Step 1: Clone inventory to allow rollback
                 ItemStack[] beforeState = inv.getContents().clone();
-
-                // Step 2: Remove input items
                 ItemDataModel.removeMatching(inv, recipe.getInputMaterial(), recipe.getInputItemData(), removeAmount);
 
-                // Step 3: Try to add output
                 HashMap<Integer, ItemStack> leftovers = inv.addItem(outputItem);
 
                 if (!leftovers.isEmpty()) {
-                    // Not enough space — rollback
                     inv.setContents(beforeState);
-                    //player.sendMessage("❌ Not enough space to compress " + matched + " " + recipe.getInputMaterial().name());
                     continue;
                 }
 
-                //player.sendMessage("✨ Auto-compressed " + removeAmount + " ➜ " + totalOutput + " " + recipe.getOutputMaterial().name());
                 compressedAny = true;
             }
 
-        } while (compressedAny); // Repeat until no more compressions can happen
+        } while (compressedAny);
     }
 
-
-    private static boolean canFitInInventory(Inventory inventory, ItemStack item) {
-        int toAdd = item.getAmount();
-
-        for (ItemStack slot : inventory.getContents()) {
-            if (slot == null || slot.getType().isAir()) {
-                toAdd -= Math.min(toAdd, item.getMaxStackSize());
-            } else if (slot.isSimilar(item)) {
-                toAdd -= Math.min(toAdd, item.getMaxStackSize() - slot.getAmount());
-            }
-
-            if (toAdd <= 0) return true;
-        }
-
-        return false;
+    public static void resetAutoCompression() {
+        intervalTaskInitialized = false;
+        initializeAutoCompression();
     }
-
 }

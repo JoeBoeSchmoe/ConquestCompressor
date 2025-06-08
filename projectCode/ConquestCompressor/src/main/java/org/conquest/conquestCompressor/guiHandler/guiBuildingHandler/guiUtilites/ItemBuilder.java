@@ -4,10 +4,13 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 
@@ -87,8 +90,6 @@ public class ItemBuilder {
                 } catch (IllegalArgumentException ignored) {}
             }
         }
-
-        // Add more fields here if needed, like DisplayName, Lore override, etc.
     }
 
     public static List<String> safeStringList(Object obj) {
@@ -111,6 +112,41 @@ public class ItemBuilder {
                 ItemFlag.HIDE_DESTROYS,
                 ItemFlag.HIDE_PLACED_ON
         );
+    }
+
+    private static final NamespacedKey PLACEHOLDER_KEY =
+            new NamespacedKey(JavaPlugin.getProvidingPlugin(ItemBuilder.class), "placeholder");
+
+    public static void setPlaceholderTag(ItemStack item) {
+        if (item == null || !item.hasItemMeta()) return;
+        ItemMeta meta = item.getItemMeta();
+        meta.getPersistentDataContainer().set(PLACEHOLDER_KEY, PersistentDataType.BYTE, (byte) 1);
+        item.setItemMeta(meta);
+    }
+
+    public static boolean hasPlaceholderTag(ItemStack item) {
+        if (item == null || !item.hasItemMeta()) return false;
+        Byte tagged = item.getItemMeta().getPersistentDataContainer().get(PLACEHOLDER_KEY, PersistentDataType.BYTE);
+        return tagged != null && tagged == (byte) 1;
+    }
+
+    public static ItemStack withPersistentKey(ItemStack item, String key, String value) {
+        if (item == null || !item.hasItemMeta()) return item;
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return item;
+
+        NamespacedKey namespacedKey = new NamespacedKey(JavaPlugin.getProvidingPlugin(ItemBuilder.class), key);
+        meta.getPersistentDataContainer().set(namespacedKey, PersistentDataType.STRING, value);
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    public static boolean hasPersistentKey(ItemStack item, String key) {
+        if (item == null || !item.hasItemMeta()) return false;
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return false;
+        NamespacedKey namespacedKey = new NamespacedKey(JavaPlugin.getProvidingPlugin(ItemBuilder.class), key);
+        return meta.getPersistentDataContainer().has(namespacedKey, PersistentDataType.STRING);
     }
 
     private static Material safeMatchMaterial(String input) {

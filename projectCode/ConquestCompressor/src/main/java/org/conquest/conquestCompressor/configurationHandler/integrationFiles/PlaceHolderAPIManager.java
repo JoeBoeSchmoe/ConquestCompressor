@@ -43,8 +43,8 @@ public class PlaceHolderAPIManager {
         }
 
         new PlaceholderExpansion() {
-            @Override public @NotNull String getIdentifier() { return "conquestcompressor"; }
-            @Override public @NotNull String getAuthor() { return "Conquest Coder"; }
+            @Override public @NotNull String getIdentifier() { return "ConquestCompressor"; }
+            @Override public @NotNull String getAuthor() { return "ConquestCoder"; }
             @Override public @NotNull String getVersion() { return "1.0"; }
 
             @Override

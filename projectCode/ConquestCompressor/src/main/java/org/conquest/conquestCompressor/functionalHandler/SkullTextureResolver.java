@@ -26,18 +26,20 @@ public class SkullTextureResolver {
      * @param item   ItemStack of type PLAYER_HEAD
      * @param base64 The Base64-encoded skin texture
      */
-    public static void applyTexture(ItemStack item, String base64) {
-        if (item == null || base64 == null) return;
-        if (!(item.getItemMeta() instanceof SkullMeta meta)) return;
+    public static void applyTexture(ItemStack item, String base64, String ownerUUIDString) {
+        if (item == null || base64 == null || !(item.getItemMeta() instanceof SkullMeta meta)) return;
 
         try {
-            UUID uuid = UUID.nameUUIDFromBytes(base64.getBytes(StandardCharsets.UTF_8));
+            UUID uuid = (ownerUUIDString != null && !ownerUUIDString.isEmpty())
+                    ? UUID.fromString(ownerUUIDString)
+                    : UUID.nameUUIDFromBytes(base64.getBytes(StandardCharsets.UTF_8));
+
             PlayerProfile profile = Bukkit.createProfile(uuid);
             profile.getProperties().add(new ProfileProperty("textures", base64));
             meta.setPlayerProfile(profile);
             item.setItemMeta(meta);
         } catch (Exception e) {
-            ConquestCompressor.getInstance().getLogger().warning("❌ Failed to apply skull texture: " + e.getMessage());
+            ConquestCompressor.getInstance().getLogger().warning("❌  Failed to apply skull texture with UUID: " + e.getMessage());
         }
     }
 

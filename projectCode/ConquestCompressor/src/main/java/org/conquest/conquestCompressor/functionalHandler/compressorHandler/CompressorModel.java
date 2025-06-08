@@ -44,10 +44,10 @@ public class CompressorModel {
         this.key = key;
         this.enabled = true;
         this.inputMaterial = Material.STONE;
-        this.inputAmount = 1;
+        this.inputAmount = -1;
         this.inputItemData = new ItemDataModel();
         this.outputMaterial = Material.DIAMOND;
-        this.outputAmount = 1;
+        this.outputAmount = -1;
         this.outputItemData = new ItemDataModel();
     }
 
@@ -109,6 +109,12 @@ public class CompressorModel {
 
     public void setOutputItemData(ItemDataModel outputItemData) {
         this.outputItemData = outputItemData;
+    }
+
+    public boolean isReal() {
+        return !(inputMaterial == Material.STONE &&
+                outputMaterial == Material.DIAMOND &&
+                inputAmount == -1);
     }
 
     /**

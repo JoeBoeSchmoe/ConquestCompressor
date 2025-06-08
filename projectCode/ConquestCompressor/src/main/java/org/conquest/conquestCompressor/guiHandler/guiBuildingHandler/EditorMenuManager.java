@@ -3,7 +3,6 @@ package org.conquest.conquestCompressor.guiHandler.guiBuildingHandler;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.conquest.conquestCompressor.configurationHandler.configurationFiles.CompressorGUIFile;
-import org.conquest.conquestCompressor.configurationHandler.configurationFiles.RecipesGUIFile;
 import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.guiMenuModels.DuelMenuMeta;
 import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.guiMenuModels.EffectModel;
 import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.guiMenuModels.FillerItemModel;
@@ -92,7 +91,6 @@ public class EditorMenuManager {
 
     public static void reload() {
         CompressorGUIFile.load();
-        RecipesGUIFile.load();
         load();
     }
 

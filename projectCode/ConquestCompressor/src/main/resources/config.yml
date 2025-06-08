@@ -45,13 +45,6 @@ command-aliases:
   - compressor
 
 # ===================================================
-# 📘 PlaceholderAPI Integration
-# Set to false to disable placeholder parsing even if PAPI is installed.
-# ===================================================
-placeholders:
-  use-placeholderapi: true
-
-# ===================================================
 # ⏱️ Cooldowns (in milliseconds)
 # Controls how often players can trigger compression actions.
 # ===================================================
@@ -96,7 +89,6 @@ compression:
 #   - m = minutes
 # ===================================================
 auto-compress-interval: "5s"
-
 
 # ===================================================
 # 🎟️ Permission Voucher Item

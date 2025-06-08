@@ -12,7 +12,6 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.conquest.conquestCompressor.configurationHandler.configurationFiles.CompressorGUIFile;
 import org.conquest.conquestCompressor.configurationHandler.configurationFiles.GameAutocompressorFile;
 import org.conquest.conquestCompressor.functionalHandler.ItemDataModel;
 import org.conquest.conquestCompressor.functionalHandler.compressorHandler.CompressorManager;
@@ -59,7 +58,7 @@ public class EditGUIListener implements Listener {
                 ItemStack cursor = event.getCursor();
                 ItemStack current = top.getItem(slot);
 
-                if (isPlaceholder(current, meta, slot)) {
+                if (ItemBuilder.hasPlaceholderTag(current)) {
                     if (cursor.getType().isAir()) {
                         MessageResponseManager.send(player, AdminMessageModels.PLACEHOLDER_REQUIRES_ITEM);
                         event.setCancelled(true);
@@ -85,7 +84,7 @@ public class EditGUIListener implements Listener {
                 ItemStack input = top.getItem(inputSlot);
                 ItemStack output = top.getItem(outputSlot);
 
-                if (!isRealItem(input, meta, inputSlot) || !isRealItem(output, meta, outputSlot)) {
+                if (!isRealItem(input) || !isRealItem(output)) {
                     MessageResponseManager.send(player, AdminMessageModels.GUI_INVALID_ITEMS);
                     return;
                 }
@@ -103,13 +102,9 @@ public class EditGUIListener implements Listener {
                 model.setOutputAmount(output.getAmount());
                 model.setOutputItemData(ItemDataModel.fromItem(output));
 
-                // ✅ Save to config
                 GameAutocompressorFile.saveCompressorModel(model);
-
-                // ✅ Register this updated model directly without reloading all
                 CompressorManager.register(model);
 
-                // 🎉 Optional: confirm visually/sound
                 ClickActionManager.handle(player, "confirm", holder.getMenuType());
             }
 
@@ -157,55 +152,8 @@ public class EditGUIListener implements Listener {
         }
     }
 
-    private boolean isRealItem(ItemStack item, DuelMenuMeta meta, int slot) {
-        return item != null && !item.getType().isAir() && !isPlaceholder(item, meta, slot);
-    }
-
-    private boolean isPlaceholder(ItemStack item, DuelMenuMeta meta, int slot) {
-        if (item == null || item.getType().isAir()) return false;
-
-        if (meta.getFillerItem() != null) {
-            ItemStack filler = ItemBuilder.create(Map.of(
-                    "material", meta.getFillerItem().getMaterial(),
-                    "name", meta.getFillerItem().getName(),
-                    "amount", meta.getFillerItem().getAmount(),
-                    "lore", meta.getFillerItem().getLore(),
-                    "enchanted", meta.getFillerItem().isEnchanted(),
-                    "customData", meta.getFillerItem().getCustomData()
-            ));
-            if (itemsEqual(item, filler)) return true;
-        }
-
-        for (Map<String, Object> layoutItem : meta.getLayout()) {
-            if ((int) layoutItem.getOrDefault("slot", -1) == slot) {
-                ItemStack layoutPlaceholder = ItemBuilder.create(layoutItem);
-                if (itemsEqual(item, layoutPlaceholder)) return true;
-            }
-        }
-
-        return false;
-    }
-
-    private boolean itemsEqual(ItemStack a, ItemStack b) {
-        if (a == null || b == null) return false;
-        if (!a.getType().equals(b.getType())) return false;
-        if (a.hasItemMeta() != b.hasItemMeta()) return false;
-
-        ItemMeta metaA = a.getItemMeta();
-        ItemMeta metaB = b.getItemMeta();
-
-        if (metaA == null || metaB == null) return false;
-
-        Component nameA = metaA.displayName();
-        Component nameB = metaB.displayName();
-        if (!Objects.equals(nameA, nameB)) return false;
-
-        List<Component> loreA = metaA.lore();
-        List<Component> loreB = metaB.lore();
-        if (!Objects.equals(loreA, loreB)) return false;
-
-        if (metaA.hasCustomModelData() != metaB.hasCustomModelData()) return false;
-        return !metaA.hasCustomModelData() || metaA.getCustomModelData() == metaB.getCustomModelData();
+    private boolean isRealItem(ItemStack item) {
+        return item != null && !item.getType().isAir() && !ItemBuilder.hasPlaceholderTag(item);
     }
 
     private int getSlotByAction(DuelMenuMeta meta, String actionName) {

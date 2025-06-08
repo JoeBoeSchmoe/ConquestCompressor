@@ -1,7 +1,6 @@
 package org.conquest.conquestCompressor.guiHandler.guiBuildingHandler;
 
 import org.conquest.conquestCompressor.functionalHandler.compressorHandler.CompressorModel;
-import org.conquest.conquestCompressor.functionalHandler.recipeHandler.RecipeModel;
 
 import java.util.UUID;
 
@@ -11,20 +10,26 @@ import java.util.UUID;
  */
 public class EditingSession {
 
+    public enum SessionMode {
+        CREATING,
+        EDITING
+    }
+
     private final UUID playerId;
+    private final SessionMode mode;
     private long lastEditTime;
 
     private Runnable confirmAction;
     private Runnable cancelAction;
     private String confirmContextKey;
 
-    private RecipeModel editingRecipe;
     private CompressorModel editingCompressor;
 
     private boolean closed = false;
 
-    public EditingSession(UUID playerId) {
+    public EditingSession(UUID playerId, SessionMode mode) {
         this.playerId = playerId;
+        this.mode = mode;
         this.lastEditTime = System.currentTimeMillis();
     }
 
@@ -32,6 +37,18 @@ public class EditingSession {
 
     public UUID getPlayerId() {
         return playerId;
+    }
+
+    public SessionMode getMode() {
+        return mode;
+    }
+
+    public boolean isCreatingMode() {
+        return mode == SessionMode.CREATING;
+    }
+
+    public boolean isEditingMode() {
+        return mode == SessionMode.EDITING;
     }
 
     public long getLastEditTime() {
@@ -88,24 +105,6 @@ public class EditingSession {
         return cancelAction;
     }
 
-    // ────────────── Recipe Context ──────────────
-
-    public RecipeModel getEditingRecipe() {
-        return editingRecipe;
-    }
-
-    public void setEditingRecipe(RecipeModel editingRecipe) {
-        this.editingRecipe = editingRecipe;
-    }
-
-    public boolean isEditingRecipe() {
-        return editingRecipe != null;
-    }
-
-    public void clearEditingRecipe() {
-        this.editingRecipe = null;
-    }
-
     // ────────────── Compressor Context ──────────────
 
     public CompressorModel getEditingCompressor() {
@@ -128,7 +127,6 @@ public class EditingSession {
 
     public void clearAllEditingContext() {
         clearConfirmContext();
-        clearEditingRecipe();
         clearEditingCompressor();
     }
 }

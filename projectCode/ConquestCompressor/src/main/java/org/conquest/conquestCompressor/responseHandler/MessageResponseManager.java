@@ -69,7 +69,59 @@ public class MessageResponseManager {
     public static void sendHelpPage(Player player, String key, int page) {
         ConfigurationSection section = AdminMessagesFile.getSection(key);
         if (section == null) {
-            log.warning("⚠️ Help section missing: " + key);
+            log.warning("⚠️  Help section missing: " + key);
+            return;
+        }
+
+        List<Map<?, ?>> allComponents = section.getMapList("components");
+        List<Map<?, ?>> visibleComponents = new ArrayList<>();
+
+        for (Map<?, ?> raw : allComponents) {
+            String permission = (String) raw.get("permission");
+            if (permission == null || permission.isBlank() || player.hasPermission(permission)) {
+                visibleComponents.add(raw);
+            }
+        }
+
+        int perPage = 7;
+        int maxPage = Math.max(1, (int) Math.ceil(visibleComponents.size() / (double) perPage));
+        page = Math.max(1, Math.min(page, maxPage));
+
+        int start = (page - 1) * perPage;
+        int end = Math.min(start + perPage, visibleComponents.size());
+        List<Map<?, ?>> pageComponents = visibleComponents.subList(start, end);
+
+        // 📜 Header
+        if (section.isList("text")) {
+            List<String> lines = section.getStringList("text");
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
+                if (i == lines.size() - 2) {
+                    line += " <gray>(Page " + page + "/" + maxPage + ")";
+                }
+                player.sendMessage(PlaceHolderAPIManager.parse(player, line));
+            }
+        }
+
+        // 🎛️ Components
+        for (Map<?, ?> map : pageComponents) {
+            Component comp = ComponentSerializerManager.deserializeComponent(map, player, Map.of(
+                    "page", String.valueOf(page),
+                    "max", String.valueOf(maxPage)
+            ));
+            player.sendMessage(comp);
+        }
+
+        player.sendMessage(Component.empty());
+
+        // ✨ Effects
+        playEffects(player, section, Map.of("page", String.valueOf(page), "max", String.valueOf(maxPage)));
+    }
+
+    public static void sendUserHelpPage(Player player, String key, int page) {
+        ConfigurationSection section = UserMessagesFile.getSection(key);
+        if (section == null) {
+            log.warning("⚠️  Help section missing: " + key);
             return;
         }
 

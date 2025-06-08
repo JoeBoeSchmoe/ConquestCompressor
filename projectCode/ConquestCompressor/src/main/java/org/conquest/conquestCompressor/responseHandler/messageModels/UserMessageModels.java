@@ -14,7 +14,14 @@ public enum UserMessageModels {
     USAGE_HINT("usage-hint"),
 
     // ⏱️ Cooldowns
-    COMMAND_ON_COOLDOWN("command-on-cooldown");
+    COMMAND_ON_COOLDOWN("command-on-cooldown"),
+
+    // 🔁 Auto Compression Toggle
+    TOGGLE_ON("toggle-on"),
+    TOGGLE_OFF("toggle-off"),
+
+    // 📘 Help Page
+    USER_HELP("user-help");
 
     private final String path;
 

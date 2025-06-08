@@ -50,12 +50,12 @@ public final class ConquestCompressor extends JavaPlugin {
         // 🧠 Start interval-based compression if enabled
         CompressorListener.initializeAutoCompression();
 
-        getLogger().info("✅ ConquestCompressor enabled successfully.");
+        getLogger().info("✅  ConquestCompressor enabled successfully.");
     }
 
     @Override
     public void onDisable() {
-        getLogger().info("📦 Saving plugin state...");
+        getLogger().info("📦  Saving plugin state...");
 
         // ❌ Close sessions and clear memory
         EditingSessionManager.closeAll();
@@ -69,7 +69,7 @@ public final class ConquestCompressor extends JavaPlugin {
         // 🛑 Cancel scheduled tasks (like interval compression)
         Bukkit.getScheduler().cancelTasks(this);
 
-        getLogger().info("🔻 ConquestCompressor has been disabled.");
+        getLogger().info("🔻  ConquestCompressor has been disabled.");
     }
 
     /**
@@ -78,34 +78,35 @@ public final class ConquestCompressor extends JavaPlugin {
     public void reload() {
         getLogger().info("🔄  Reloading ConquestCompressor...");
 
-        // ❌ Reset open menus and state
+        // ❌ Reset GUI sessions
         EditingSessionManager.closeAll();
         EditingSessionManager.clear();
 
-        // ♻️ Re-initialize configs + menus
+        // ♻️ Re-initialize configuration and GUI menus
         configurationManager.initialize();
         EditorMenuManager.reload();
 
-        // 🔁 Reload compressor recipes
+        // 🔁 Reload compression recipes
         CompressorManager.clear();
         CompressorManager.load();
 
-        // 🔁 Unregister old listeners first
+        // 🔻 Unregister all listeners
         HandlerList.unregisterAll(this);
 
-        // 🎧 Register new listener instances
+        // 🛑 Cancel all scheduled tasks (auto-compress task included)
+        Bukkit.getScheduler().cancelTasks(this);
+
+        // 🎧 Re-register fresh listener instances
         registerListeners(
                 new EditGUIListener(),
                 new CompressorListener()
         );
 
-        // 🕒 Restart interval logic if needed
-        CompressorListener.initializeAutoCompression();
+        // 🔁 Restart interval compression logic with updated config
+        CompressorListener.resetAutoCompression();
 
         getLogger().info("✅  Reload complete.");
     }
-
-
     /**
      * Registers main command and aliases.
      */
@@ -114,7 +115,7 @@ public final class ConquestCompressor extends JavaPlugin {
         PluginCommand command = getCommand("conquestcompressor");
 
         if (command == null) {
-            getLogger().severe("❌ Command 'conquestcompressor' not found in plugin.yml!");
+            getLogger().severe("❌  Command 'conquestcompressor' not found in plugin.yml!");
             return;
         }
 
@@ -123,7 +124,7 @@ public final class ConquestCompressor extends JavaPlugin {
 
         List<String> aliases = getConfig().getStringList("command-aliases");
         if (!aliases.isEmpty()) {
-            getLogger().info("🔗 Registered aliases: " + String.join(", ", aliases));
+            getLogger().info("🔗  Registered aliases: " + String.join(", ", aliases));
         }
     }
 

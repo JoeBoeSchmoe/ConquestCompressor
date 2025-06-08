@@ -19,8 +19,8 @@ public class EditingSessionManager {
     // 🎮 Session Lifecycle
     // ─────────────────────────────────────────
 
-    public static EditingSession getOrCreate(Player player) {
-        return sessions.computeIfAbsent(player.getUniqueId(), EditingSession::new);
+    public static EditingSession getOrCreate(Player player, EditingSession.SessionMode mode) {
+        return sessions.computeIfAbsent(player.getUniqueId(), id -> new EditingSession(id, mode));
     }
 
     public static Optional<EditingSession> get(Player player) {

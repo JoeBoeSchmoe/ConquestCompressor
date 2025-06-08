@@ -3,10 +3,10 @@ package org.conquest.conquestCompressor.guiHandler;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.EditingSession;
 import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.EditingSessionManager;
 import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.EditorMenuManager;
 import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.guiMenuManagers.CompressorGUIManager;
-import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.guiMenuManagers.RecipesGUIManager;
 import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.guiMenuModels.DuelMenuMeta;
 import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.guiMenuModels.EffectModel;
 import org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.guiMenuModels.FillerItemModel;
@@ -24,14 +24,12 @@ public class GUIOpener {
 
     public static void open(Player player, GUIFileEnums type) {
         ensureMetaBuilt(type);
-        EditingSessionManager.getOrCreate(player).touch();
+        EditingSessionManager.getOrCreate(player, EditingSession.SessionMode.EDITING).touch();
 
         switch (type) {
             case COMPRESSOR -> CompressorGUIManager.open(player);
-            case RECIPES -> RecipesGUIManager.open(player);
         }
     }
-
     private static void ensureMetaBuilt(GUIFileEnums type) {
         if (EditorMenuManager.hasMeta(type)) return;
 

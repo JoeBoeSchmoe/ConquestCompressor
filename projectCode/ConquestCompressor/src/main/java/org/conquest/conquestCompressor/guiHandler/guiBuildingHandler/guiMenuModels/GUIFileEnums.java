@@ -2,7 +2,6 @@ package org.conquest.conquestCompressor.guiHandler.guiBuildingHandler.guiMenuMod
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.conquest.conquestCompressor.configurationHandler.configurationFiles.CompressorGUIFile;
-import org.conquest.conquestCompressor.configurationHandler.configurationFiles.RecipesGUIFile;
 
 /**
  * 📁 GUIFileEnums
@@ -10,13 +9,6 @@ import org.conquest.conquestCompressor.configurationHandler.configurationFiles.R
  * Enum to link each GUI type to its corresponding configuration file source.
  */
 public enum GUIFileEnums {
-
-    RECIPES {
-        @Override
-        public FileConfiguration getConfig() {
-            return RecipesGUIFile.getConfig();
-        }
-    },
 
     COMPRESSOR {
         @Override

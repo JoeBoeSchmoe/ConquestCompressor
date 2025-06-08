@@ -83,6 +83,69 @@ messages:
       subtitle: "<gray>Try /compressor help to get started."
       timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
 
+    # 🔁 TOGGLE ON
+  toggle-on:
+    text: [ "<green>Auto compression enabled!" ]
+    hover: "<gray>You’ll now auto-compress on pickup and interaction."
+    click: ""
+    clickType: "NONE"
+    components: [ ]
+    prefix: true
+    sound: { type: ENTITY_EXPERIENCE_ORB_PICKUP, volume: 1.0, pitch: 1.2 }
+    particles: [ { type: VILLAGER_HAPPY, count: 5, offset: [0.2, 0.3, 0.2], speed: 0.02 } ]
+    actionbar: { text: "<green>Auto compression is now ON.", duration: 60 }
+    title:
+      text: "<green><bold>Auto Enabled</bold></green>"
+      subtitle: "<gray>Compression will now occur automatically."
+      timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
 
+  # 🔁 TOGGLE OFF
+  toggle-off:
+    text: [ "<red>Auto compression disabled." ]
+    hover: "<gray>You’ll need to compress manually."
+    click: ""
+    clickType: "NONE"
+    components: [ ]
+    prefix: true
+    sound: { type: BLOCK_NOTE_BLOCK_BASS, volume: 1.0, pitch: 0.9 }
+    particles: [ { type: SMOKE_NORMAL, count: 3, offset: [0.2, 0.2, 0.2], speed: 0.01 } ]
+    actionbar: { text: "<red>Auto compression is now OFF.", duration: 60 }
+    title:
+      text: "<red><bold>Auto Disabled</bold></red>"
+      subtitle: "<gray>Compression is not turned OFF."
+      timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
+
+  # 📘 USER HELP
+  user-help:
+    text:
+      - ""
+      - "<gray><bold>📘 ConquestCompressor Help</bold>"
+      - ""
+    hover: "<gray>Click any command to autofill it.</gray>"
+    click: ""
+    clickType: "NONE"
+    components:
+      - text: " <white>/compressor help <gray>- View this help menu"
+        hover: "<gray>Shows all player commands</gray>"
+        click: "/compressor help"
+        clickType: "SUGGEST_COMMAND"
+        permission: "conquestcompressor.user.help"
+
+      - text: " <white>/compressor toggle <gray>- Toggle auto-compression"
+        hover: "<gray>Enable or disable auto-compression</gray>"
+        click: "/compressor toggle"
+        clickType: "SUGGEST_COMMAND"
+        permission: "conquestcompressor.user.auto.toggle"
+
+    prefix: true
+    sound: { type: UI_BUTTON_CLICK, volume: 1.0, pitch: 1.1 }
+    particles: [ { type: ENCHANTMENT_TABLE, count: 5, offset: [ 0.2, 0.3, 0.2 ], speed: 0.02 } ]
+    effects: [ { type: SPEED, amplifier: 0, duration: 60 } ]
+    bossbar: { text: "<aqua>User Help Page", color: "BLUE", overlay: "PROGRESS", time: 60, progress: 1.0 }
+    actionbar: { text: "<gray>You're viewing user commands.", duration: 60 }
+    title:
+      text: "<aqua><bold>Compressor Help</bold></aqua>"
+      subtitle: "<gray>See available player commands."
+      timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
 
 # End Of Config :D

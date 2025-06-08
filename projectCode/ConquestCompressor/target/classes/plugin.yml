@@ -13,11 +13,6 @@ description: >
   A utility plugin that optimizes spawner functionality and performance
   through smart compression logic. Includes admin commands and full config support.
 
-# Optional Dependencies
-softdepend:
-  - PlaceholderAPI
-  - Vault
-
 # ===================================================
 # 🧭 Commands
 # Commands registered in CommandManager.java
@@ -52,9 +47,25 @@ permissions:
     description: Edit, create, or delete compressor recipes
     default: op
 
-  conquestcompressor.admin.recipe:
-    description: Edit, create, or delete crafting recipes
-    default: op
+  conquestcompressor.user.help:
+    description: View help menu for user commands
+    default: true
+
+  conquestcompressor.user.auto:
+    description: Allows use of automatic compression features
+    default: true
+
+  conquestcompressor.user.auto.toggle:
+    description: Allows use of toggling automatic compression features
+    default: true
+
+  conquestcompressor.user.*:
+    description: Grants access to all user-level compressor features
+    default: true
+    children:
+      conquestcompressor.user.help: true
+      conquestcompressor.user.auto: true
+      conquestcompressor.user.auto.toggle: true
 
   conquestcompressor.admin.*:
     description: Grants full access to all ConquestCompressor admin commands
@@ -65,13 +76,6 @@ permissions:
       conquestcompressor.admin.reload: true
       conquestcompressor.admin.compressor: true
       conquestcompressor.admin.recipe: true
-
-  conquestcompressor.user.auto:
-    description: Allows use of automatic compression features
-    default: true
-
-  conquestcompressor.user.*:
-    description: Grants access to all user-level compressor features
-    default: true
-    children:
+      conquestcompressor.user.help: true
       conquestcompressor.user.auto: true
+      conquestcompressor.user.auto.toggle: true

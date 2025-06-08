@@ -180,7 +180,6 @@ public class GameAutocompressorFile {
         }
     }
 
-
     public static YamlConfiguration getConfig() {
         return config;
     }

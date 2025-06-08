@@ -7,6 +7,7 @@ import org.conquest.conquestCompressor.compressingHandler.AutoCompressTrigger;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -76,6 +77,10 @@ public class ConfigFile {
 
     public static double getDouble(String path, double def) {
         return config != null ? config.getDouble(path, def) : def;
+    }
+
+    public static List<String> getStringList(String path) {
+        return config != null ? config.getStringList(path) : List.of();
     }
 
     public static AutoCompressTrigger getCompressTrigger() {

@@ -32,6 +32,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
         ALIAS_MAP.put("help", "help");
         ALIAS_MAP.put("h", "help");
 
+        ALIAS_MAP.put("toggle", "toggle");
+        ALIAS_MAP.put("t", "toggle");
+
         ALIAS_MAP.put("give", "give");
         ALIAS_MAP.put("g", "give");
 

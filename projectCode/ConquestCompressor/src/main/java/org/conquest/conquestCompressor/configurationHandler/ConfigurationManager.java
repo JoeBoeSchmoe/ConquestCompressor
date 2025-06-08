@@ -4,7 +4,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.conquest.conquestCompressor.ConquestCompressor;
 import org.conquest.conquestCompressor.configurationHandler.configurationFiles.*;
 import org.conquest.conquestCompressor.configurationHandler.integrationFiles.PlaceHolderAPIManager;
-import org.conquest.conquestCompressor.configurationHandler.integrationFiles.VaultManager;
 
 import java.util.logging.Logger;
 
@@ -30,10 +29,9 @@ public class ConfigurationManager {
             ConfigFile.load();
             AdminMessagesFile.load();
             UserMessagesFile.load();
-            GameRecipesFile.load();
             GameAutocompressorFile.load();
+            PlayerToggleStatesFile.load();
 
-            RecipesGUIFile.load();
             CompressorGUIFile.load();
 
             this.config = ConfigFile.getConfig();
@@ -42,7 +40,6 @@ public class ConfigurationManager {
             checkAll();
 
             // 🔌 Integrations
-            setupVault();
             setupPlaceholderAPI();
 
             log.info("✅  Configuration loading complete.");
@@ -80,17 +77,9 @@ public class ConfigurationManager {
      */
     private void check(String path) {
         if (!ConfigFile.contains(path)) {
-            log.warning("⚠️ Missing config.yml key: '" + path + "'");
+            log.warning("⚠️  Missing config.yml key: '" + path + "'");
         }
     }
-
-    /**
-     * Initializes Vault integration if enabled.
-     */
-    private void setupVault() {
-        VaultManager.initialize(true);
-    }
-
     /**
      * Initializes PlaceholderAPI integration if enabled.
      */
