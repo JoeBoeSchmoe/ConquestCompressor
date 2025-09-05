@@ -8,6 +8,7 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.conquest.conquestCompressor.ConquestCompressor;
+import org.conquest.conquestCompressor.commandHandler.subcommandHandler.UserCommands;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,21 +44,27 @@ public class PlaceHolderAPIManager {
         }
 
         new PlaceholderExpansion() {
-            @Override public @NotNull String getIdentifier() { return "ConquestCompressor"; }
+            @Override public @NotNull String getIdentifier() {
+                // Final placeholder will be: %conquestcompressor_active_status%
+                return "conquestcompressor";
+            }
             @Override public @NotNull String getAuthor() { return "ConquestCoder"; }
-            @Override public @NotNull String getVersion() { return "1.0"; }
+            @Override public @NotNull String getVersion() { return "1.2.0"; }
+            @Override public boolean persist() { return true; }
+            @Override public boolean canRegister() { return true; }
 
             @Override
             public @Nullable String onPlaceholderRequest(Player player, @NotNull String identifier) {
                 if (player == null) return "";
 
-                return switch (identifier.toLowerCase()) {
-                    case "player" -> player.getName();
-                    case "displayname" -> plain(player.displayName());
-                    case "elo", "wins", "losses", "streak", "best_streak" -> "0"; // TODO: Hook real stats later
-                    case "state" -> "Idle";
-                    default -> null;
-                };
+                // %conquestcompressor_active_status%
+                if (identifier.equalsIgnoreCase("active_status")) {
+                    boolean enabled = UserCommands.isAutoCompressEnabled(player);
+                    return enabled ? "Enabled" : "Disabled";
+                }
+
+                // (Optional extras can live here later)
+                return null;
             }
         }.register();
 

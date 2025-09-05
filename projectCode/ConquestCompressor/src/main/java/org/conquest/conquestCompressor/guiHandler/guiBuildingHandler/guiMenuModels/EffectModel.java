@@ -56,7 +56,7 @@ public class EffectModel {
             if (optionalSound.isPresent()) {
                 player.playSound(location, optionalSound.get(), volume, pitch);
             } else {
-                ConquestCompressor.getInstance().getLogger().warning("[ConquestDuels] ⚠️  Unknown or incompatible sound: '" + soundType + "'");
+                ConquestCompressor.getInstance().getLogger().warning("[ConquestCompressor] ⚠️  Unknown or incompatible sound: '" + soundType + "'");
             }
         }
 
@@ -74,7 +74,7 @@ public class EffectModel {
                         model.getSpeed()
                 );
             } catch (IllegalArgumentException e) {
-                ConquestCompressor.getInstance().getLogger().warning("[ConquestDuels] ⚠️  Invalid particle type: '" + model.getType() + "'");
+                ConquestCompressor.getInstance().getLogger().warning("[ConquestCompressor] ⚠️  Invalid particle type: '" + model.getType() + "'");
             }
         }
     }

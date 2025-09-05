@@ -97,13 +97,4 @@ compression:
 # ===================================================
 auto-compress-interval: "5s"
 
-# ===================================================
-# 🎟️ Permission Voucher Item
-# Defines the item used as a voucher for unlocking compressor access.
-# Can be given via command or used in GUI/shop integration.
-# ===================================================
-compressor-permission-voucher:
-  material: PAPER
-  itemData: [ ]
-
 # End of config.yml

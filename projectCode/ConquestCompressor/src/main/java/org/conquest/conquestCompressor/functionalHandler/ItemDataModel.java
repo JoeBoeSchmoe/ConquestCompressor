@@ -316,31 +316,88 @@ public class ItemDataModel implements ConfigurationSerializable {
     }
 
     public static int countMatching(Inventory inventory, Material material, ItemDataModel dataModel) {
+        if (inventory == null || material == null) return 0;
+
         int count = 0;
         for (ItemStack item : inventory.getContents()) {
-            if (item == null || item.getType() != material) continue;
-            if (dataModel != null && !dataModel.matches(item)) continue;
-            count += item.getAmount();
+            if (strictMatches(item, material, dataModel)) {
+                count += item.getAmount();
+            }
         }
         return count;
     }
 
     public static void removeMatching(Inventory inventory, Material material, ItemDataModel dataModel, int amountToRemove) {
-        Iterator<ItemStack> iterator = inventory.iterator();
-        while (iterator.hasNext() && amountToRemove > 0) {
-            ItemStack item = iterator.next();
-            if (item == null || item.getType() != material) continue;
-            if (dataModel != null && !dataModel.matches(item)) continue;
+        if (inventory == null || material == null || amountToRemove <= 0) return;
+
+        for (int i = 0; i < inventory.getSize() && amountToRemove > 0; i++) {
+            ItemStack item = inventory.getItem(i);
+            if (!strictMatches(item, material, dataModel)) continue;
 
             int stackAmount = item.getAmount();
             if (stackAmount <= amountToRemove) {
                 amountToRemove -= stackAmount;
-                item.setAmount(0);
+                inventory.clear(i);
             } else {
                 item.setAmount(stackAmount - amountToRemove);
+                inventory.setItem(i, item);
                 amountToRemove = 0;
             }
         }
+    }
+
+    /**
+     * Strict matching:
+     * - Always requires exact Material.
+     * - If dataModel != null  -> use dataModel.matches(item) (full meta match).
+     * - If dataModel == null  -> only match "plain" items (no name, lore, enchants, flags, model data, unbreakable, skull texture/owner).
+     */
+    public static boolean strictMatches(ItemStack item, Material material, ItemDataModel dataModel) {
+        if (item == null || item.getType() != material) return false;
+
+        if (dataModel != null) {
+            // Use the existing full metadata checker
+            return dataModel.matches(item);
+        }
+
+        // No data model provided -> accept ONLY plain/vanilla stacks
+        ItemMeta meta = item.getItemMeta();
+        return meta == null || isMetaEmpty(meta, item.getType());
+    }
+
+    /** Returns true if the meta carries no visible/behavioral customization. */
+    private static boolean isMetaEmpty(ItemMeta meta, Material type) {
+        if (meta == null) return true;
+
+        // Display name
+        if (meta.displayName() != null) return false;
+
+        // Lore
+        if (meta.lore() != null && !meta.lore().isEmpty()) return false;
+
+        // Custom model data
+        if (meta.hasCustomModelData()) return false;
+
+        // Enchants
+        if (!meta.getEnchants().isEmpty()) return false;
+
+        // Unbreakable
+        if (meta.isUnbreakable()) return false;
+
+        // Item flags
+        if (!meta.getItemFlags().isEmpty()) return false;
+
+        // Skull-specific: any texture/owner means "not plain"
+        if (type == Material.PLAYER_HEAD && meta instanceof org.bukkit.inventory.meta.SkullMeta skullMeta) {
+            try {
+                String texture = SkullTextureResolver.extractTextureFromMeta(skullMeta);
+                if (texture != null) return false;
+                if (skullMeta.getPlayerProfile() != null && skullMeta.getPlayerProfile().getId() != null) return false;
+            } catch (Exception ignored) {
+            }
+        }
+
+        return true;
     }
 
     public void applyTo(ItemStack item) {
