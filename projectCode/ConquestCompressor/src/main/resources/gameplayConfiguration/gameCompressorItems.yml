@@ -8,12 +8,11 @@
 compressorItems:
 
   gold_compressor:
-    enabled: true
+    enabled: false
 
     # The physical item the player must hold/click with
     item:
       material: GOLD_INGOT
-      amount: 1
       itemData:
         displayName: "<gold><bold>Gold Compressor"
         lore:
@@ -39,11 +38,10 @@ compressorItems:
       - gold_ingot_to_block
 
   iron_compressor:
-    enabled: true
+    enabled: false
 
     item:
       material: IRON_INGOT
-      amount: 1
       itemData:
         displayName: "<white><bold>Iron Compressor"
         lore:
@@ -67,11 +65,10 @@ compressorItems:
       - iron_ingot_to_block
 
   redstone_compressor:
-    enabled: true
+    enabled: false
 
     item:
       material: REDSTONE
-      amount: 1
       itemData:
         displayName: "<red><bold>Redstone Compressor"
         lore:

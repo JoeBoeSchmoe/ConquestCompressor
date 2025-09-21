@@ -7,6 +7,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.conquest.conquestCompressor.commandHandler.CommandManager;
+import org.conquest.conquestCompressor.compressingHandler.CompressorItemListener;
 import org.conquest.conquestCompressor.compressingHandler.CompressorListener;
 import org.conquest.conquestCompressor.compressingHandler.PlayerStateListener;
 import org.conquest.conquestCompressor.configurationHandler.ConfigurationManager;
@@ -46,6 +47,7 @@ public final class ConquestCompressor extends JavaPlugin {
         registerListeners(
                 new EditGUIListener(),
                 new CompressorListener(),
+                new CompressorItemListener(),
                 new PlayerStateListener()
         );
 

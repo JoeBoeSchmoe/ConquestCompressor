@@ -26,7 +26,6 @@ import java.util.logging.Logger;
  *     enabled: true
  *     item:
  *       material: GOLD_INGOT
- *       amount: 1
  *       itemData: { ... ItemDataModel.serialize() ... }
  *     trigger:
  *       leftClick: true
@@ -34,6 +33,9 @@ import java.util.logging.Logger;
  *       cooldownTicks: 10
  *       consumeOnUse: false
  *     recipes: [gold_ingot_to_block]
+ *
+ * Notes:
+ * - Stack size (amount) is intentionally ignored. If present in legacy configs, it is tolerated but not used/saved.
  */
 public class GameCompressorItemFile {
 
@@ -105,7 +107,6 @@ public class GameCompressorItemFile {
 
                     String matName = itemSec.getString("material", "");
                     Material material = Material.matchMaterial(matName);
-                    int amount = Math.max(1, itemSec.getInt("amount", 1));
 
                     ItemDataModel itemData = null;
                     if (itemSec.isConfigurationSection("itemData")) {
@@ -142,7 +143,6 @@ public class GameCompressorItemFile {
                             key,
                             enabled,
                             material,
-                            amount,
                             itemData,
                             leftClick,
                             rightClick,
@@ -189,8 +189,8 @@ public class GameCompressorItemFile {
         // ---- item ----
         ConfigurationSection itemSec = sec.createSection("item");
         itemSec.set("material", model.material().name());
-        itemSec.set("amount", Math.max(1, model.amount()));
         model.itemData().ifPresent(idm -> itemSec.set("itemData", idm.serialize()));
+        // Note: amount intentionally not saved
 
         // ---- trigger ----
         ConfigurationSection trig = sec.createSection("trigger");

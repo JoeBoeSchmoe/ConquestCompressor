@@ -19,7 +19,6 @@ import java.util.*;
  *   enabled: boolean
  *   item:
  *     material: STRING
- *     amount: INT
  *     itemData: { displayName, lore[], customModelData, unbreakable, enchantments[], nbt{}, itemFlags[], skullTexture, skullOwnerUUID }
  *   trigger:
  *     leftClick: boolean
@@ -31,6 +30,7 @@ import java.util.*;
  * Notes:
  * - Item creation/matching delegates to ItemDataModel (consistent with CompressorModel.buildOutputItem()).
  * - Adds PDC marker + compressor_key for robust recognition.
+ * - Stack size (amount) is intentionally ignored; items are identified by type/meta only.
  */
 public class CompressorItemModel {
 
@@ -45,7 +45,6 @@ public class CompressorItemModel {
 
     // Item template
     private final Material material;
-    private final int amount;
     private final ItemDataModel itemData; // nullable
 
     // Trigger
@@ -61,7 +60,6 @@ public class CompressorItemModel {
             String key,
             boolean enabled,
             Material material,
-            int amount,
             ItemDataModel itemData,
             boolean leftClick,
             boolean rightClick,
@@ -72,7 +70,6 @@ public class CompressorItemModel {
         this.key = Objects.requireNonNull(key, "key");
         this.enabled = enabled;
         this.material = Objects.requireNonNull(material, "material");
-        this.amount = Math.max(1, amount);
         this.itemData = itemData;
         this.leftClick = leftClick;
         this.rightClick = rightClick;
@@ -93,7 +90,7 @@ public class CompressorItemModel {
             throw new IllegalArgumentException("Unknown material '" + matName + "' for compressorItems." + key);
         }
 
-        int amount = Math.max(1, itemSec.getInt("amount", 1));
+        // amount is intentionally ignored (backward-compat tolerant if present)
 
         // Deserialize ItemDataModel from nested map
         ItemDataModel dataModel = null;
@@ -117,21 +114,19 @@ public class CompressorItemModel {
         }
 
         return new CompressorItemModel(
-                key, enabled, material, amount, dataModel,
+                key, enabled, material, dataModel,
                 leftClick, rightClick, cooldownTicks, consumeOnUse, recipes
         );
     }
 
     /**
      * Builds the in-game item using ItemDataModel, then injects PDC identifiers.
+     * Stack size is not set here (defaults to 1) because amount is irrelevant.
      */
     public ItemStack buildItem() {
         ItemStack stack = (itemData != null)
                 ? itemData.toItemStack(material)
-                : new ItemStack(material, amount);
-
-        // Ensure correct amount
-        stack.setAmount(amount);
+                : new ItemStack(material); // default amount 1
 
         // Inject PDC
         ItemMeta meta = stack.getItemMeta();
@@ -149,6 +144,7 @@ public class CompressorItemModel {
      * 1) Prefer PDC match (fast & precise).
      * 2) Fallback: require Material + ItemDataModel.matches(...) if itemData is defined.
      *    If no itemData, require a "plain" stack of this material.
+     * Stack size is never considered.
      */
     public boolean matches(ItemStack stack) {
         if (stack == null || stack.getType() == Material.AIR) return false;
@@ -175,7 +171,6 @@ public class CompressorItemModel {
     public String key() { return key; }
     public boolean enabled() { return enabled; }
     public Material material() { return material; }
-    public int amount() { return amount; }
     public Optional<ItemDataModel> itemData() { return Optional.ofNullable(itemData); }
     public boolean leftClick() { return leftClick; }
     public boolean rightClick() { return rightClick; }
@@ -207,7 +202,6 @@ public class CompressorItemModel {
         return "CompressorItemModel{" +
                 "key='" + key + '\'' +
                 ", material=" + material +
-                ", amount=" + amount +
                 ", recipes=" + recipeKeys +
                 '}';
     }

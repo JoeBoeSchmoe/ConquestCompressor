@@ -42,6 +42,7 @@ org\conquest\conquestCompressor\cooldownHandler\CommandCooldownManager.class
 org\conquest\conquestCompressor\ConquestCompressor.class
 org\conquest\conquestCompressor\guiHandler\guiBuildingHandler\guiMenuModels\FillerItemModel.class
 org\conquest\conquestCompressor\guiHandler\GUIOpener$1.class
+org\conquest\conquestCompressor\compressingHandler\CompressorItemListener.class
 org\conquest\conquestCompressor\guiHandler\guiBuildingHandler\guiMenuModels\EffectModel.class
 org\conquest\conquestCompressor\cooldownHandler\InteractionCooldownManager.class
 org\conquest\conquestCompressor\guiHandler\guiBuildingHandler\guiMenuManagers\CompressorGUIManager.class
