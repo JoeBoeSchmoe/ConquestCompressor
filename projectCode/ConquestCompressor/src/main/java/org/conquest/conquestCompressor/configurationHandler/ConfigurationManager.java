@@ -30,6 +30,7 @@ public class ConfigurationManager {
             AdminMessagesFile.load();
             UserMessagesFile.load();
             GameAutocompressorFile.load();
+            GameCompressorItemFile.load();
             PlayerToggleStatesFile.load();
 
             CompressorGUIFile.load();

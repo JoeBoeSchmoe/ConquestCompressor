@@ -11,6 +11,7 @@ C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCod
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\configurationHandler\configurationFiles\CompressorGUIFile.java
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\configurationHandler\configurationFiles\ConfigFile.java
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\configurationHandler\configurationFiles\GameAutocompressorFile.java
+C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\configurationHandler\configurationFiles\GameCompressorItemFile.java
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\configurationHandler\configurationFiles\PlayerToggleStatesFile.java
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\configurationHandler\configurationFiles\UserMessagesFile.java
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\configurationHandler\ConfigurationManager.java
@@ -19,6 +20,8 @@ C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCod
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\cooldownHandler\CommandCooldownManager.java
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\cooldownHandler\GUICooldownManager.java
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\cooldownHandler\InteractionCooldownManager.java
+C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\functionalHandler\compressorHandler\CompressorItemManager.java
+C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\functionalHandler\compressorHandler\CompressorItemModel.java
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\functionalHandler\compressorHandler\CompressorManager.java
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\functionalHandler\compressorHandler\CompressorModel.java
 C:\Users\josep\OneDrive\Desktop\ConquestCompressor\ConquestCompressor\projectCode\ConquestCompressor\src\main\java\org\conquest\conquestCompressor\functionalHandler\EnchantmentDataModel.java

@@ -1,0 +1,106 @@
+# ===================================================
+# 🎛️ Game Click Compressor Items - gameCompressorItems.yml
+# Items that, when left/right-clicked, compress the player's
+# inventory according to one or more linked recipes.
+# Follows the same itemData structure used in gameAutoCompressor.yml.
+# ===================================================
+
+compressorItems:
+
+  gold_compressor:
+    enabled: true
+
+    # The physical item the player must hold/click with
+    item:
+      material: GOLD_INGOT
+      amount: 1
+      itemData:
+        displayName: "<gold><bold>Gold Compressor"
+        lore:
+          - "<yellow>Click to compress inventory."
+          - "<gray>9x Gold Ingots → 1x Gold Block"
+        customModelData: 20101
+        unbreakable: true
+        enchantments:
+          - name: unbreaking
+            level: 1
+        nbt:
+          compressor_key: "gold_compressor"
+
+    # How to trigger compression
+    trigger:
+      leftClick: true
+      rightClick: true
+      cooldownTicks: 10
+      consumeOnUse: false
+
+    # Which recipe keys this item will run (can be 1..N)
+    recipes:
+      - gold_ingot_to_block
+
+  iron_compressor:
+    enabled: true
+
+    item:
+      material: IRON_INGOT
+      amount: 1
+      itemData:
+        displayName: "<white><bold>Iron Compressor"
+        lore:
+          - "<gray>Click to compress inventory."
+          - "<gray>9x Iron Ingots → 1x Iron Block"
+        customModelData: 20102
+        unbreakable: true
+        enchantments:
+          - name: unbreaking
+            level: 1
+        nbt:
+          compressor_key: "iron_compressor"
+
+    trigger:
+      leftClick: true
+      rightClick: true
+      cooldownTicks: 10
+      consumeOnUse: false
+
+    recipes:
+      - iron_ingot_to_block
+
+  redstone_compressor:
+    enabled: true
+
+    item:
+      material: REDSTONE
+      amount: 1
+      itemData:
+        displayName: "<red><bold>Redstone Compressor"
+        lore:
+          - "<red>Click to compress inventory."
+          - "<gray>9x Redstone → 1x Redstone Block"
+        customModelData: 20103
+        unbreakable: true
+        enchantments:
+          - name: unbreaking
+            level: 1
+        nbt:
+          compressor_key: "redstone_compressor"
+
+    trigger:
+      leftClick: true
+      rightClick: true
+      cooldownTicks: 10
+      consumeOnUse: false
+
+    # Demonstrates that an item can map to multiple recipes if desired.
+    # Add more keys here (e.g., "coal_to_block") and the same item will compress all of them.
+    recipes:
+      - redstone_to_block
+      #- another example
+
+# ===================================================
+# Notes
+# - The recipe keys above (gold_ingot_to_block, iron_ingot_to_block, redstone_to_block)
+#   should correspond to your global recipe definitions (e.g., in gameAutoCompressor.yml or a shared recipes file).
+# - "requireExactMetaMatch" logic can be enforced in code if desired.
+# - To create a “multi-compressor” item, just add more keys under `recipes:` for that item.
+# ===================================================

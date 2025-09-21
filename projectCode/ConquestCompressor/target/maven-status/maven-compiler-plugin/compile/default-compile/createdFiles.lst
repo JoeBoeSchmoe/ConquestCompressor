@@ -15,6 +15,7 @@ org\conquest\conquestCompressor\guiHandler\guiBuildingHandler\guiMenuModels\Duel
 org\conquest\conquestCompressor\guiHandler\guiBuildingHandler\guiUtilites\ClickActionManager.class
 org\conquest\conquestCompressor\responseHandler\messageModels\UserMessageModels.class
 org\conquest\conquestCompressor\responseHandler\effectHandler\EffectResponseManager.class
+org\conquest\conquestCompressor\configurationHandler\configurationFiles\GameCompressorItemFile.class
 org\conquest\conquestCompressor\responseHandler\effectHandler\TitleResponseManager.class
 org\conquest\conquestCompressor\commandHandler\subcommandHandler\UserCommands.class
 org\conquest\conquestCompressor\commandHandler\CommandManager.class
@@ -58,6 +59,8 @@ org\conquest\conquestCompressor\responseHandler\effectHandler\SoundResponseManag
 org\conquest\conquestCompressor\configurationHandler\configurationFiles\AdminMessagesFile.class
 org\conquest\conquestCompressor\responseHandler\effectHandler\ParticleResponseManager.class
 org\conquest\conquestCompressor\guiHandler\guiBuildingHandler\guiUtilites\ItemBuilder.class
+org\conquest\conquestCompressor\functionalHandler\compressorHandler\CompressorItemManager.class
 org\conquest\conquestCompressor\functionalHandler\compressorHandler\CompressorManager.class
 org\conquest\conquestCompressor\compressingHandler\CompressorListener$2.class
 org\conquest\conquestCompressor\guiHandler\guiBuildingHandler\EditorMenuManager.class
+org\conquest\conquestCompressor\functionalHandler\compressorHandler\CompressorItemModel.class
