@@ -103,7 +103,9 @@ public final class ConquestCompressor extends JavaPlugin {
         // 🎧 Re-register fresh listener instances
         registerListeners(
                 new EditGUIListener(),
-                new CompressorListener()
+                new CompressorListener(),
+                new CompressorItemListener(),
+                new PlayerStateListener()
         );
 
         // 🔁 Restart interval compression logic with updated config
