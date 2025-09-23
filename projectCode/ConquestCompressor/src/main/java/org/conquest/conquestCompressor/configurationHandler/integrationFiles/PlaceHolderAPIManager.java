@@ -49,7 +49,7 @@ public class PlaceHolderAPIManager {
                 return "conquestcompressor";
             }
             @Override public @NotNull String getAuthor() { return "ConquestCoder"; }
-            @Override public @NotNull String getVersion() { return "1.2.0"; }
+            @Override public @NotNull String getVersion() { return "1.4.0"; }
             @Override public boolean persist() { return true; }
             @Override public boolean canRegister() { return true; }
 

@@ -6,8 +6,8 @@
 
     <groupId>org.conquest</groupId>
     <artifactId>conquestcompressor</artifactId>
-    <version>1.3.0</version>
-    <name>ConquestCompressor-1.3.0</name>
+    <version>1.4.0</version>
+    <name>ConquestCompressor-1.4.0</name>
     <packaging>jar</packaging>
 
     <properties>
@@ -93,7 +93,7 @@
     </dependencies>
 
     <build>
-        <finalName>ConquestCompressor-1.3.0</finalName>
+        <finalName>ConquestCompressor-1.4.0</finalName>
         <defaultGoal>clean package</defaultGoal>
         <plugins>
             <!-- 🔧 Compiler Plugin -->
