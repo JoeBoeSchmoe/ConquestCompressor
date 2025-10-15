@@ -41,6 +41,7 @@ org\conquest\conquestCompressor\configurationHandler\configurationFiles\Compress
 org\conquest\conquestCompressor\cooldownHandler\CommandCooldownManager.class
 org\conquest\conquestCompressor\ConquestCompressor.class
 org\conquest\conquestCompressor\guiHandler\guiBuildingHandler\guiMenuModels\FillerItemModel.class
+org\conquest\conquestCompressor\compressingHandler\AutoCompressTrigger$EventKey.class
 org\conquest\conquestCompressor\guiHandler\GUIOpener$1.class
 org\conquest\conquestCompressor\compressingHandler\CompressorItemListener.class
 org\conquest\conquestCompressor\guiHandler\guiBuildingHandler\guiMenuModels\EffectModel.class

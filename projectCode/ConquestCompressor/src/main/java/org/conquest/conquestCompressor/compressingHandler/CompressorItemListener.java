@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.conquest.conquestCompressor.commandHandler.permissionHandler.PermissionManager;
 import org.conquest.conquestCompressor.configurationHandler.configurationFiles.ConfigFile;
 import org.conquest.conquestCompressor.functionalHandler.ItemDataModel;
 import org.conquest.conquestCompressor.functionalHandler.compressorHandler.CompressorItemManager;
@@ -87,11 +88,16 @@ public class CompressorItemListener implements Listener {
     private boolean compressForItem(Player player, CompressorItemModel itemModel) {
         Inventory inv = player.getInventory();
 
-        // Collect enabled recipe models for this item
+        // Collect enabled + permitted recipe models for this item
         List<CompressorModel> recipes = new ArrayList<>();
         for (String key : itemModel.recipeKeys()) {
             CompressorModel r = CompressorManager.getRecipe(key);
-            if (r != null && r.isEnabled()) recipes.add(r);
+            if (r == null || !r.isEnabled()) continue;
+
+            // NEW: permission gate (wildcard or specific)
+            if (!PermissionManager.hasRecipe(player, key)) continue;
+
+            recipes.add(r);
         }
         if (recipes.isEmpty()) return false;
 

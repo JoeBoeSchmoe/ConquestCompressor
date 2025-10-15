@@ -14,6 +14,9 @@ public enum PermissionModels {
     USER_TOGGLE("conquestcompressor.user.auto.toggle"),
     USER_ALL("conquestcompressor.user.*"),
 
+    // NEW: per-recipe wildcard (all recipes)
+    USER_AUTO_RECIPE_ALL("conquestcompressor.user.auto.recipe.*"),
+
     // ─────────────────────────────────────────────
     // 🛠 Admin Base & Wildcard
     // ─────────────────────────────────────────────
@@ -43,5 +46,28 @@ public enum PermissionModels {
     @Override
     public String toString() {
         return node;
+    }
+
+    // ─────────────────────────────────────────────
+    // Per-recipe helpers
+    // ─────────────────────────────────────────────
+
+    /**
+     * Builds the specific per-recipe permission node for the given recipe id.
+     * Example: "iron_ingot" -> "conquestcompressor.user.auto.recipe.iron_ingot"
+     */
+    public static String userRecipeNode(String recipeId) {
+        if (recipeId == null || recipeId.isEmpty()) return null;
+        // If you want to enforce allowed chars, sanitize/validate here:
+        // recipeId = recipeId.toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9_\\-\\.]", "");
+        return "conquestcompressor.user.auto.recipe." + recipeId;
+    }
+
+    /**
+     * True if the provided id looks like a safe permission suffix.
+     * (Optional hardening if ids can be user-provided.)
+     */
+    public static boolean isValidRecipeId(String recipeId) {
+        return recipeId != null && recipeId.matches("[A-Za-z0-9._\\-]+");
     }
 }

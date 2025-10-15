@@ -8,12 +8,13 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.conquest.conquestCompressor.ConquestCompressor;
+import org.conquest.conquestCompressor.commandHandler.permissionHandler.PermissionManager;
+import org.conquest.conquestCompressor.commandHandler.permissionHandler.PermissionModels;
 import org.conquest.conquestCompressor.commandHandler.subcommandHandler.UserCommands;
 import org.conquest.conquestCompressor.configurationHandler.configurationFiles.ConfigFile;
 import org.conquest.conquestCompressor.functionalHandler.ItemDataModel;
@@ -27,6 +28,9 @@ import java.util.List;
 /**
  * 🧠 CompressorListener
  * Handles automatic compression based on configured triggers.
+ * Now enforces per-recipe permissions:
+ *  - conquestcompressor.user.auto.recipe.* (all)
+ *  - conquestcompressor.user.auto.recipe.<recipe_id>
  */
 public class CompressorListener implements Listener {
 
@@ -98,13 +102,8 @@ public class CompressorListener implements Listener {
         compress(player);
     }
 
-    @EventHandler
-    public void onShiftToggle(PlayerToggleSneakEvent event) {
-        if (!isEnabled("ON_SHIFT_TOGGLE")) return;
-        if (shouldCompress(event.getPlayer())) {
-            compress(event.getPlayer());
-        }
-    }
+    // NOTE: Removed onShiftToggle handler because "ON_SHIFT_TOGGLE" is not a supported key.
+    // Shift + clicks are already handled below via ON_SHIFT_LEFT_CLICK / ON_SHIFT_RIGHT_CLICK.
 
     @EventHandler
     public void onShiftClick(PlayerInteractEvent event) {
@@ -126,7 +125,8 @@ public class CompressorListener implements Listener {
     }
 
     private static boolean shouldCompress(Player player) {
-        return player.hasPermission("conquestcompressor.user.auto") && UserCommands.isAutoCompressEnabled(player);
+        // Use your centralized permission manager for the base toggle permission.
+        return PermissionManager.has(player, PermissionModels.USER_AUTO) && UserCommands.isAutoCompressEnabled(player);
     }
 
     private boolean isEnabled(String key) {
@@ -151,7 +151,16 @@ public class CompressorListener implements Listener {
             compressedAny = false;
 
             for (CompressorModel recipe : recipes) {
-                if (!recipe.isEnabled()) continue;
+                if (recipe == null || !recipe.isEnabled()) continue;
+
+                // ----- NEW: Per-recipe permission gate -----
+                // Ensure you can obtain the canonical recipe id used in permissions.
+                // Prefer recipe.getKey() / getId() depending on your model.
+                String key = recipe.getKey(); // <-- if you use a different accessor, update here.
+                if (key == null || key.isEmpty()) continue;
+
+                if (!PermissionManager.hasRecipe(player, key)) continue;
+                // -------------------------------------------
 
                 int matched = ItemDataModel.countMatching(inv, recipe.getInputMaterial(), recipe.getInputItemData());
                 int sets = matched / recipe.getInputAmount();

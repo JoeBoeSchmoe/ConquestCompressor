@@ -5,7 +5,7 @@
 # ===================================================
 
 name: ConquestCompressor
-version: 1.3.0
+version: 1.5.0
 main: org.conquest.conquestCompressor.ConquestCompressor
 api-version: 1.21
 author: Conquest Coder
@@ -59,6 +59,19 @@ permissions:
     description: Allows use of toggling automatic compression features
     default: true
 
+  # ─────────────────────────────────────────────
+  # Per-recipe user permissions (auto + item use)
+  # Node for a specific recipe id: conquestcompressor.user.auto.recipe.<recipe_id>
+  # Wildcard for all recipes:    conquestcompressor.user.auto.recipe.*
+  # Defaults keep current behavior: everyone can use all recipes
+  # ─────────────────────────────────────────────
+  conquestcompressor.user.auto.recipe.*:
+    description: Allows using automatic/manual compression for all recipes
+    default: true
+
+  # Tip: You do NOT enumerate specific recipe ids here. LuckPerms (and others)
+  # support assigning conquestcompressor.user.auto.recipe.<recipe_id> directly.
+
   conquestcompressor.user.*:
     description: Grants access to all user-level compressor features
     default: true
@@ -66,6 +79,7 @@ permissions:
       conquestcompressor.user.help: true
       conquestcompressor.user.auto: true
       conquestcompressor.user.auto.toggle: true
+      conquestcompressor.user.auto.recipe.*: true
 
   conquestcompressor.admin.*:
     description: Grants full access to all ConquestCompressor admin commands

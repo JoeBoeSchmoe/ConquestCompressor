@@ -38,4 +38,48 @@ public class PermissionManager {
 
         return false;
     }
+
+    /**
+     * Checks per-recipe access. Accepts either the wildcard node
+     * (conquestcompressor.user.auto.recipe.*) or the specific node
+     * (conquestcompressor.user.auto.recipe.<recipe_id>).
+     *
+     * Also inherits your wildcard ancestry logic (e.g., conquestcompressor.user.*).
+     *
+     * @param sender   The command sender
+     * @param recipeId The internal recipe identifier (config / manager key)
+     * @return true if the sender can use this recipe
+     */
+    public static boolean hasRecipe(CommandSender sender, String recipeId) {
+        if (sender.isOp()) return true;
+        if (!PermissionModels.isValidRecipeId(recipeId)) return false;
+
+        // If player has "user.*" that already covers everything via has(...)
+        if (has(sender, PermissionModels.USER_ALL)) return true;
+
+        // Wildcard for all recipes
+        if (has(sender, PermissionModels.USER_AUTO_RECIPE_ALL)) return true;
+
+        // Specific node
+        String node = PermissionModels.userRecipeNode(recipeId);
+        if (node == null) return false;
+
+        // Direct permission or any wildcard parent (re-use same ancestry logic)
+        // We can't call has(sender, <enum>) here because it's a dynamic string,
+        // so we duplicate the ancestry logic for this dynamic node:
+        if (sender.hasPermission(node)) return true;
+
+        String[] parts = node.split("\\.");
+        StringBuilder current = new StringBuilder();
+        for (int i = 0; i < parts.length - 1; i++) {
+            if (i > 0) current.append(".");
+            current.append(parts[i]);
+
+            if (sender.hasPermission(current + ".*")) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
