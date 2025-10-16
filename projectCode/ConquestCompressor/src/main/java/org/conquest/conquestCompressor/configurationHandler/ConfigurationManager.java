@@ -68,9 +68,22 @@ public class ConfigurationManager {
         check("cooldowns.command-delay-ms");
         check("cooldowns.gui-action-cooldown-ms");
         check("cooldowns.interaction-cooldown-ms");
+        check("cooldowns.compression-action-cooldown-ms"); // keep aligned with your earlier sections
 
         // GUI settings
         check("gui-settings.timeout-seconds");
+
+        // ───────── New compression trigger contract ─────────
+        check("compression-trigger.strategy");
+        // AUTO branch
+        check("compression-trigger.auto.target-mode");
+        // interval can be here or at legacy root; warn if both missing
+        if (!ConfigFile.contains("compression-trigger.auto.interval")
+                && !ConfigFile.contains("auto-compress-interval")) {
+            log.warning("⚠️  Missing auto interval: set 'compression-trigger.auto.interval' or legacy 'auto-compress-interval'.");
+        }
+        // MANUAL branch
+        check("compression-trigger.manual.interactions");
     }
 
     /**
@@ -81,6 +94,7 @@ public class ConfigurationManager {
             log.warning("⚠️  Missing config.yml key: '" + path + "'");
         }
     }
+
     /**
      * Initializes PlaceholderAPI integration if enabled.
      */

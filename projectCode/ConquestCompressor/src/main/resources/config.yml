@@ -97,4 +97,64 @@ compression:
 # ===================================================
 auto-compress-interval: "5s"
 
+# ===================================================
+# 🔁 Compression Trigger System
+# Determines how and when item compression occurs.
+#
+# ──────────────── ⚙️ STRATEGY ────────────────
+#   AUTO   → Compression runs automatically based on the item’s location.
+#   MANUAL → Compression only occurs when the player interacts (clicks).
+#
+# Notes:
+#   • Only one strategy is active at a time.
+#   • When strategy = AUTO, manual triggers are ignored.
+#   • When strategy = MANUAL, all auto behaviors are disabled.
+# ===================================================
+compression-trigger:
+  strategy: "AUTO"   # AUTO | MANUAL
+
+  # ===================================================
+  # ⚙️ AUTO MODE SETTINGS
+  # Controls automatic compression behavior.
+  #
+  # target-mode:
+  #   ALL               → Compresses entire inventory and both hands.
+  #   INVENTORY         → Compresses only the main inventory (no hands).
+  #   HOLDING           → Compresses any item currently held in hands.
+  #   HOLD_IN_MAIN_HAND → Compresses only the main hand.
+  #   HOLD_IN_OFF_HAND  → Compresses only the off hand.
+  #
+  # interval:
+  #   Defines how often auto compression checks occur.
+  #   Accepts: "1500ms", "45s", "2m", etc.
+  # ===================================================
+  auto:
+    target-mode: "ALL"
+    interval: "5s"
+
+  # ===================================================
+  # 🖱️ MANUAL MODE SETTINGS
+  # Compression is triggered only when the player performs
+  # specific interactions such as clicks.
+  #
+  # interactions:
+  #   - LEFT_CLICK_AIR
+  #   - LEFT_CLICK_BLOCK
+  #   - RIGHT_CLICK_AIR
+  #   - RIGHT_CLICK_BLOCK
+  #   - SHIFT_LEFT_CLICK
+  #   - SHIFT_RIGHT_CLICK
+  #   - ALL (any of the above)
+  #
+  # Example:
+  #   interactions:
+  #     - RIGHT_CLICK_AIR
+  #     - RIGHT_CLICK_BLOCK
+  # ===================================================
+  manual:
+    interactions:
+      - RIGHT_CLICK_AIR
+      - RIGHT_CLICK_BLOCK
+
+
 # End of config.yml

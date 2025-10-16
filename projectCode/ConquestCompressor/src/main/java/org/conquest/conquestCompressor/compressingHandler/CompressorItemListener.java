@@ -19,54 +19,91 @@ import org.conquest.conquestCompressor.functionalHandler.compressorHandler.Compr
 import org.conquest.conquestCompressor.functionalHandler.compressorHandler.CompressorModel;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
  * 🖱️ CompressorItemListener
- * Lets players left/right-click with a configured "compressor item" to run its recipes,
- * regardless of auto-compress permission/toggle.
- * - Respects per-item triggers (left/right), cooldownTicks, and consumeOnUse.
- * - Obeys world restrictions from config.
+ * Manual interaction path for "compressor items".
+ *
+ * Active only when: compression-trigger.strategy == MANUAL
+ * Respects:
+ *   - compression-trigger.manual.interactions
+ *   - per-item trigger flags (left/right)
+ *   - world restrictions
+ *   - cooldown + consumeOnUse
  */
 public class CompressorItemListener implements Listener {
 
+    // Local enum for configured interaction types (no new classes introduced).
+    private enum InteractionType {
+        LEFT_CLICK_AIR, LEFT_CLICK_BLOCK,
+        RIGHT_CLICK_AIR, RIGHT_CLICK_BLOCK,
+        SHIFT_LEFT_CLICK, SHIFT_RIGHT_CLICK,
+        ALL;
+
+        static EnumSet<InteractionType> parse(List<String> raw) {
+            if (raw == null || raw.isEmpty()) return EnumSet.noneOf(InteractionType.class);
+            EnumSet<InteractionType> set = EnumSet.noneOf(InteractionType.class);
+            for (String s : raw) {
+                if (s == null) continue;
+                String key = s.trim().toUpperCase(Locale.ROOT);
+                if ("ALL".equals(key)) return EnumSet.allOf(InteractionType.class);
+                try { set.add(InteractionType.valueOf(key)); } catch (IllegalArgumentException ignored) {}
+            }
+            return set;
+        }
+    }
+
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
-        Action action = event.getAction();
+        // Only active when strategy == MANUAL
+        final String strategy = ConfigFile.contains("compression-trigger.strategy")
+                ? ConfigFile.getString("compression-trigger.strategy")
+                : "AUTO";
+        if (!"MANUAL".equalsIgnoreCase(strategy)) return;
+
+        final Action action = event.getAction();
+        // Fast path: only process known click actions
         if (action != Action.LEFT_CLICK_AIR && action != Action.LEFT_CLICK_BLOCK
                 && action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
 
+        // Match against configured interaction list (default to empty -> no manual triggers)
+        final List<String> rawList = ConfigFile.getStringList("compression-trigger.manual.interactions");
+        final EnumSet<InteractionType> enabled = InteractionType.parse(rawList);
+        if (!matchesConfiguredInteraction(enabled, action, event.getPlayer().isSneaking())) return;
+
         // Only handle the hand that fired the event (prevents double-processing)
-        EquipmentSlot hand = event.getHand();
+        final EquipmentSlot hand = event.getHand();
         if (hand == null) return;
 
-        ItemStack stack = event.getItem();
+        final ItemStack stack = event.getItem();
         if (stack == null || stack.getType() == Material.AIR) return;
 
-        Player player = event.getPlayer();
-
-        // Resolve compressor item model (PDC fast path + meta fallback)
-        CompressorItemModel model = CompressorItemManager.match(stack).orElse(null);
-        if (model == null || !model.enabled()) return;
-
-        // Check per-item trigger
-        boolean left = (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK);
-        boolean right = (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK);
-        if ((left && !model.leftClick()) || (right && !model.rightClick())) return;
+        final Player player = event.getPlayer();
 
         // World restrictions
         if (!isWorldAllowed(player)) return;
 
+        // Resolve compressor item model (PDC fast path + meta fallback)
+        final CompressorItemModel model = CompressorItemManager.match(stack).orElse(null);
+        if (model == null || !model.enabled()) return;
+
+        // Per-item trigger constraint (still enforced)
+        final boolean left = (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK);
+        final boolean right = (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK);
+        if ((left && !model.leftClick()) || (right && !model.rightClick())) return;
+
         // Cooldown (ticks)
-        long nowTick = currentTick(player);
+        final long nowTick = currentTick(player);
         if (CompressorItemManager.isOnCooldown(player, model, nowTick)) return;
 
         // Compress only with this item's recipe set
-        boolean compressed = compressForItem(player, model);
-
+        final boolean compressed = compressForItem(player, model);
         if (compressed) {
             // Start cooldown (if any)
             CompressorItemManager.startCooldown(player, model, nowTick);
@@ -82,6 +119,40 @@ public class CompressorItemListener implements Listener {
     }
 
     // ───────────────────────────────────────────
+    // Configured interaction matching
+    // ───────────────────────────────────────────
+
+    private boolean matchesConfiguredInteraction(EnumSet<InteractionType> enabled, Action action, boolean sneaking) {
+        if (enabled.isEmpty()) return false;
+        if (enabled.contains(InteractionType.ALL)) return true;
+
+        // SHIFT_* takes precedence when sneaking
+        if (sneaking) {
+            switch (action) {
+                case LEFT_CLICK_AIR:
+                case LEFT_CLICK_BLOCK:
+                    if (enabled.contains(InteractionType.SHIFT_LEFT_CLICK)) return true;
+                    break;
+                case RIGHT_CLICK_AIR:
+                case RIGHT_CLICK_BLOCK:
+                    if (enabled.contains(InteractionType.SHIFT_RIGHT_CLICK)) return true;
+                    break;
+                default:
+                    // ignore
+            }
+        }
+
+        // Non-shift variants
+        return switch (action) {
+            case LEFT_CLICK_AIR    -> enabled.contains(InteractionType.LEFT_CLICK_AIR);
+            case LEFT_CLICK_BLOCK  -> enabled.contains(InteractionType.LEFT_CLICK_BLOCK);
+            case RIGHT_CLICK_AIR   -> enabled.contains(InteractionType.RIGHT_CLICK_AIR);
+            case RIGHT_CLICK_BLOCK -> enabled.contains(InteractionType.RIGHT_CLICK_BLOCK);
+            default -> false;
+        };
+    }
+
+    // ───────────────────────────────────────────
     // Compression limited to the item's recipes
     // ───────────────────────────────────────────
 
@@ -94,7 +165,7 @@ public class CompressorItemListener implements Listener {
             CompressorModel r = CompressorManager.getRecipe(key);
             if (r == null || !r.isEnabled()) continue;
 
-            // NEW: permission gate (wildcard or specific)
+            // Permission gate (wildcard or specific)
             if (!PermissionManager.hasRecipe(player, key)) continue;
 
             recipes.add(r);
@@ -140,10 +211,11 @@ public class CompressorItemListener implements Listener {
     // ───────────────────────────────────────────
 
     private boolean isWorldAllowed(Player player) {
-        boolean useWhitelist = ConfigFile.getBoolean("world-restrictions.whitelist-worlds", false);
+        boolean useWhitelist = ConfigFile.contains("world-restrictions.whitelist-worlds")
+                && ConfigFile.getBoolean("world-restrictions.whitelist-worlds", false);
         if (!useWhitelist) return true;
         List<String> allowed = ConfigFile.getStringList("world-restrictions.allowed-worlds");
-        return allowed.contains(player.getWorld().getName());
+        return allowed != null && allowed.contains(player.getWorld().getName());
     }
 
     private void consumeOneFromHand(Player player, EquipmentSlot hand) {

@@ -112,7 +112,7 @@ messages:
     actionbar: { text: "<red>Auto compression is now OFF.", duration: 60 }
     title:
       text: "<red><bold>Auto Disabled</bold></red>"
-      subtitle: "<gray>Compression is not turned OFF."
+      subtitle: "<gray>Compression is now turned OFF."
       timings: { fadeIn: 10, stay: 40, fadeOut: 20 }
 
   # 📘 USER HELP
