@@ -115,12 +115,9 @@ compression-trigger:
 
   # ===================================================
   # ⚙️ AUTO MODE SETTINGS
-  # Controls automatic compression behavior.
-  #
   # target-mode:
-  #   ALL               → Compresses entire inventory and both hands.
-  #   INVENTORY         → Compresses only the main inventory (no hands).
-  #   HOLDING           → Compresses any item currently held in hands.
+  #   INVENTORY         → Compresses the main inventory **and** both hands.
+  #   HOLDING           → Compresses whichever hands are currently occupied.
   #   HOLD_IN_MAIN_HAND → Compresses only the main hand.
   #   HOLD_IN_OFF_HAND  → Compresses only the off hand.
   #
@@ -129,32 +126,26 @@ compression-trigger:
   #   Accepts: "1500ms", "45s", "2m", etc.
   # ===================================================
   auto:
-    target-mode: "ALL"
+    target-mode: "INVENTORY"
     interval: "5s"
 
   # ===================================================
   # 🖱️ MANUAL MODE SETTINGS
-  # Compression is triggered only when the player performs
-  # specific interactions such as clicks.
+  # Compression triggers only on these interactions:
+  #   - LEFT_CLICK
+  #   - RIGHT_CLICK
+  #   - HOLD_SHIFT_LEFT_CLICK
+  #   - HOLD_SHIFT_RIGHT_CLICK
+  #   - ALL
   #
-  # interactions:
-  #   - LEFT_CLICK_AIR
-  #   - LEFT_CLICK_BLOCK
-  #   - RIGHT_CLICK_AIR
-  #   - RIGHT_CLICK_BLOCK
-  #   - SHIFT_LEFT_CLICK
-  #   - SHIFT_RIGHT_CLICK
-  #   - ALL (any of the above)
-  #
-  # Example:
-  #   interactions:
-  #     - RIGHT_CLICK_AIR
-  #     - RIGHT_CLICK_BLOCK
+  # Backwards-compatible synonyms (optional):
+  #   LEFT_CLICK_AIR, LEFT_CLICK_BLOCK  → LEFT_CLICK
+  #   RIGHT_CLICK_AIR, RIGHT_CLICK_BLOCK → RIGHT_CLICK
+  #   SHIFT_LEFT_CLICK → HOLD_SHIFT_LEFT_CLICK
+  #   SHIFT_RIGHT_CLICK → HOLD_SHIFT_RIGHT_CLICK
   # ===================================================
   manual:
     interactions:
-      - RIGHT_CLICK_AIR
-      - RIGHT_CLICK_BLOCK
-
+      - RIGHT_CLICK
 
 # End of config.yml

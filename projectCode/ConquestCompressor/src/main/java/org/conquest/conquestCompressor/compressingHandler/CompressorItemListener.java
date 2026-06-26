@@ -20,6 +20,7 @@ import org.conquest.conquestCompressor.functionalHandler.compressorHandler.Compr
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -30,19 +31,42 @@ import java.util.Map;
  *
  * Active only when: compression-trigger.strategy == MANUAL
  * Respects:
- *   - compression-trigger.manual.interactions
+ *   - compression-trigger.manual.interactions (simplified set)
  *   - per-item trigger flags (left/right)
  *   - world restrictions
  *   - cooldown + consumeOnUse
  */
 public class CompressorItemListener implements Listener {
 
-    // Local enum for configured interaction types (no new classes introduced).
+    // ───────────────────────────────────────────
+    // Simplified interaction set + legacy aliases
+    // ───────────────────────────────────────────
     private enum InteractionType {
-        LEFT_CLICK_AIR, LEFT_CLICK_BLOCK,
-        RIGHT_CLICK_AIR, RIGHT_CLICK_BLOCK,
-        SHIFT_LEFT_CLICK, SHIFT_RIGHT_CLICK,
+        LEFT_CLICK,
+        RIGHT_CLICK,
+        HOLD_SHIFT_LEFT_CLICK,
+        HOLD_SHIFT_RIGHT_CLICK,
         ALL;
+
+        // Legacy → simplified aliases
+        private static final Map<String, InteractionType> ALIASES;
+        static {
+            Map<String, InteractionType> m = new HashMap<>();
+            // canonical
+            m.put("LEFT_CLICK", LEFT_CLICK);
+            m.put("RIGHT_CLICK", RIGHT_CLICK);
+            m.put("HOLD_SHIFT_LEFT_CLICK", HOLD_SHIFT_LEFT_CLICK);
+            m.put("HOLD_SHIFT_RIGHT_CLICK", HOLD_SHIFT_RIGHT_CLICK);
+            m.put("ALL", ALL);
+            // legacy synonyms
+            m.put("LEFT_CLICK_AIR", LEFT_CLICK);
+            m.put("LEFT_CLICK_BLOCK", LEFT_CLICK);
+            m.put("RIGHT_CLICK_AIR", RIGHT_CLICK);
+            m.put("RIGHT_CLICK_BLOCK", RIGHT_CLICK);
+            m.put("SHIFT_LEFT_CLICK", HOLD_SHIFT_LEFT_CLICK);
+            m.put("SHIFT_RIGHT_CLICK", HOLD_SHIFT_RIGHT_CLICK);
+            ALIASES = m;
+        }
 
         static EnumSet<InteractionType> parse(List<String> raw) {
             if (raw == null || raw.isEmpty()) return EnumSet.noneOf(InteractionType.class);
@@ -50,8 +74,11 @@ public class CompressorItemListener implements Listener {
             for (String s : raw) {
                 if (s == null) continue;
                 String key = s.trim().toUpperCase(Locale.ROOT);
-                if ("ALL".equals(key)) return EnumSet.allOf(InteractionType.class);
-                try { set.add(InteractionType.valueOf(key)); } catch (IllegalArgumentException ignored) {}
+                InteractionType mapped = ALIASES.get(key);
+                if (mapped != null) {
+                    if (mapped == ALL) return EnumSet.allOf(InteractionType.class);
+                    set.add(mapped);
+                }
             }
             return set;
         }
@@ -66,18 +93,24 @@ public class CompressorItemListener implements Listener {
         if (!"MANUAL".equalsIgnoreCase(strategy)) return;
 
         final Action action = event.getAction();
-        // Fast path: only process known click actions
+        // Only care about left/right clicks
         if (action != Action.LEFT_CLICK_AIR && action != Action.LEFT_CLICK_BLOCK
                 && action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
 
-        // Match against configured interaction list (default to empty -> no manual triggers)
+        // Parse simplified manual interactions
         final List<String> rawList = ConfigFile.getStringList("compression-trigger.manual.interactions");
         final EnumSet<InteractionType> enabled = InteractionType.parse(rawList);
-        if (!matchesConfiguredInteraction(enabled, action, event.getPlayer().isSneaking())) return;
+        if (enabled.isEmpty()) return;
 
-        // Only handle the hand that fired the event (prevents double-processing)
+        // Map event → simplified type (with shift modifier)
+        final boolean sneaking = event.getPlayer().isSneaking();
+        final InteractionType fired = mapToInteraction(action, sneaking);
+
+        if (!enabled.contains(InteractionType.ALL) && !enabled.contains(fired)) return;
+
+        // Only handle the hand that fired (avoid double-processing)
         final EquipmentSlot hand = event.getHand();
         if (hand == null) return;
 
@@ -94,9 +127,9 @@ public class CompressorItemListener implements Listener {
         if (model == null || !model.enabled()) return;
 
         // Per-item trigger constraint (still enforced)
-        final boolean left = (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK);
-        final boolean right = (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK);
-        if ((left && !model.leftClick()) || (right && !model.rightClick())) return;
+        final boolean isLeft = (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK);
+        final boolean isRight = !isLeft;
+        if ((isLeft && !model.leftClick()) || (isRight && !model.rightClick())) return;
 
         // Cooldown (ticks)
         final long nowTick = currentTick(player);
@@ -118,38 +151,14 @@ public class CompressorItemListener implements Listener {
         }
     }
 
-    // ───────────────────────────────────────────
-    // Configured interaction matching
-    // ───────────────────────────────────────────
-
-    private boolean matchesConfiguredInteraction(EnumSet<InteractionType> enabled, Action action, boolean sneaking) {
-        if (enabled.isEmpty()) return false;
-        if (enabled.contains(InteractionType.ALL)) return true;
-
-        // SHIFT_* takes precedence when sneaking
+    // Map Bukkit action + shift to simplified interaction
+    private InteractionType mapToInteraction(Action action, boolean sneaking) {
+        final boolean isLeft = (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK);
         if (sneaking) {
-            switch (action) {
-                case LEFT_CLICK_AIR:
-                case LEFT_CLICK_BLOCK:
-                    if (enabled.contains(InteractionType.SHIFT_LEFT_CLICK)) return true;
-                    break;
-                case RIGHT_CLICK_AIR:
-                case RIGHT_CLICK_BLOCK:
-                    if (enabled.contains(InteractionType.SHIFT_RIGHT_CLICK)) return true;
-                    break;
-                default:
-                    // ignore
-            }
+            return isLeft ? InteractionType.HOLD_SHIFT_LEFT_CLICK : InteractionType.HOLD_SHIFT_RIGHT_CLICK;
+        } else {
+            return isLeft ? InteractionType.LEFT_CLICK : InteractionType.RIGHT_CLICK;
         }
-
-        // Non-shift variants
-        return switch (action) {
-            case LEFT_CLICK_AIR    -> enabled.contains(InteractionType.LEFT_CLICK_AIR);
-            case LEFT_CLICK_BLOCK  -> enabled.contains(InteractionType.LEFT_CLICK_BLOCK);
-            case RIGHT_CLICK_AIR   -> enabled.contains(InteractionType.RIGHT_CLICK_AIR);
-            case RIGHT_CLICK_BLOCK -> enabled.contains(InteractionType.RIGHT_CLICK_BLOCK);
-            default -> false;
-        };
     }
 
     // ───────────────────────────────────────────

@@ -10,6 +10,7 @@ org\conquest\conquestCompressor\functionalHandler\compressorHandler\CompressorMo
 org\conquest\conquestCompressor\guiHandler\guiBuildingHandler\EditingSession.class
 org\conquest\conquestCompressor\compressingHandler\AutoCompressTrigger$Type.class
 org\conquest\conquestCompressor\responseHandler\effectHandler\BossBarResponseManager.class
+org\conquest\conquestCompressor\compressingHandler\CompressorListener$TargetMode.class
 org\conquest\conquestCompressor\configurationHandler\configurationFiles\ConfigFile.class
 org\conquest\conquestCompressor\guiHandler\guiBuildingHandler\guiMenuModels\DuelMenuMeta.class
 org\conquest\conquestCompressor\guiHandler\guiBuildingHandler\guiUtilites\ClickActionManager.class
@@ -20,13 +21,13 @@ org\conquest\conquestCompressor\configurationHandler\configurationFiles\GameComp
 org\conquest\conquestCompressor\responseHandler\effectHandler\TitleResponseManager.class
 org\conquest\conquestCompressor\commandHandler\subcommandHandler\UserCommands.class
 org\conquest\conquestCompressor\commandHandler\CommandManager.class
+org\conquest\conquestCompressor\compressingHandler\CompressorListener$4.class
 org\conquest\conquestCompressor\guiHandler\guiBuildingHandler\guiMenuModels\GUIFileEnums.class
 org\conquest\conquestCompressor\responseHandler\effectHandler\ActionBarResponseManager.class
 org\conquest\conquestCompressor\commandHandler\AutoTabManager.class
 org\conquest\conquestCompressor\configurationHandler\integrationFiles\PlaceHolderAPIManager$PlaceholderSet.class
 org\conquest\conquestCompressor\configurationHandler\configurationFiles\CompressorGUIFile.class
 org\conquest\conquestCompressor\guiHandler\guiBuildingHandler\guiUtilites\EditingMenuHolder.class
-org\conquest\conquestCompressor\compressingHandler\CompressorItemListener$1.class
 org\conquest\conquestCompressor\guiHandler\guiBuildingHandler\guiUtilites\EffectModelParser.class
 org\conquest\conquestCompressor\configurationHandler\ConfigurationManager.class
 org\conquest\conquestCompressor\guiHandler\guiBuildingHandler\guiUtilites\FillerItemParser.class
@@ -34,6 +35,7 @@ org\conquest\conquestCompressor\configurationHandler\configurationFiles\UserMess
 org\conquest\conquestCompressor\guiHandler\guiBuildingHandler\EditGUIListener.class
 org\conquest\conquestCompressor\guiHandler\guiBuildingHandler\EditingSessionManager.class
 org\conquest\conquestCompressor\compressingHandler\CompressorListener.class
+org\conquest\conquestCompressor\compressingHandler\CompressorListener$3.class
 org\conquest\conquestCompressor\compressingHandler\PlayerStateListener.class
 org\conquest\conquestCompressor\commandHandler\permissionHandler\PermissionModels.class
 org\conquest\conquestCompressor\functionalHandler\SkullTextureResolver.class
