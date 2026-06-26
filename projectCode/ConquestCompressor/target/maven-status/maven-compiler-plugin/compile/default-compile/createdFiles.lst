@@ -1,3 +1,4 @@
+org\conquest\conquestCompressor\functionalHandler\ItemDataModel$AttributeDataModel.class
 org\conquest\conquestCompressor\functionalHandler\ItemDataModel.class
 org\conquest\conquestCompressor\commandHandler\permissionHandler\PermissionManager.class
 org\conquest\conquestCompressor\configurationHandler\integrationFiles\PlaceHolderAPIManager$1.class

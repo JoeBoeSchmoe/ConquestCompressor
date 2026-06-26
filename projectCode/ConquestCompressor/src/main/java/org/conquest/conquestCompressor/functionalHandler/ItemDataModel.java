@@ -794,7 +794,6 @@ public class ItemDataModel implements ConfigurationSerializable {
             case "LEGS", "LEGGINGS" -> EquipmentSlotGroup.LEGS;
             case "FEET", "BOOTS" -> EquipmentSlotGroup.FEET;
             case "ARMOR" -> EquipmentSlotGroup.ARMOR;
-            case "SADDLE" -> EquipmentSlotGroup.SADDLE;
             default -> null;
         };
     }
