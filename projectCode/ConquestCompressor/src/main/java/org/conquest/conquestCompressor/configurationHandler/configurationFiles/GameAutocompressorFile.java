@@ -12,6 +12,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -65,6 +69,7 @@ public class GameAutocompressorFile {
             }
 
             int loadedCount = 0;
+
             for (String key : compressions.getKeys(false)) {
                 try {
                     ConfigurationSection section = compressions.getConfigurationSection(key);
@@ -86,7 +91,7 @@ public class GameAutocompressorFile {
                     if (hasItems.contains("itemData")) {
                         ConfigurationSection dataSec = hasItems.getConfigurationSection("itemData");
                         if (dataSec != null) {
-                            inputData = ItemDataModel.deserialize(dataSec.getValues(false));
+                            inputData = ItemDataModel.deserialize(toPlainMap(dataSec));
                         } else {
                             log.warning("⚠️  itemData in hasItems is not a ConfigurationSection for: " + key);
                         }
@@ -106,7 +111,7 @@ public class GameAutocompressorFile {
                     if (giveItems.contains("itemData")) {
                         ConfigurationSection dataSec = giveItems.getConfigurationSection("itemData");
                         if (dataSec != null) {
-                            outputData = ItemDataModel.deserialize(dataSec.getValues(false));
+                            outputData = ItemDataModel.deserialize(toPlainMap(dataSec));
                         } else {
                             log.warning("⚠️  itemData in giveItems is not a ConfigurationSection for: " + key);
                         }
@@ -143,7 +148,6 @@ public class GameAutocompressorFile {
         }
     }
 
-
     public static void saveCompressorModel(CompressorModel model) {
         if (config == null || model == null) {
             log.warning("⚠️ Cannot save compressor model: config or model is null.");
@@ -159,6 +163,7 @@ public class GameAutocompressorFile {
         ConfigurationSection input = section.createSection("hasItems");
         input.set("material", model.getInputMaterial().name());
         input.set("amount", model.getInputAmount());
+
         if (model.getInputItemData() != null) {
             input.set("itemData", model.getInputItemData().serialize());
         }
@@ -167,6 +172,7 @@ public class GameAutocompressorFile {
         ConfigurationSection output = section.createSection("giveItems");
         output.set("material", model.getOutputMaterial().name());
         output.set("amount", model.getOutputAmount());
+
         if (model.getOutputItemData() != null) {
             output.set("itemData", model.getOutputItemData().serialize());
         }
@@ -205,5 +211,71 @@ public class GameAutocompressorFile {
 
     public static boolean contains(String path) {
         return config != null && config.contains("compressions." + path);
+    }
+
+    /**
+     * Converts Bukkit ConfigurationSection trees into normal nested Maps.
+     *
+     * This matters for deep itemData values such as:
+     *
+     * itemData:
+     *   attributes:
+     *     - attribute: generic.attack_damage
+     *       name: conquest_attack_damage
+     *       amount: 12.0
+     *       operation: ADD_NUMBER
+     *       slot: MAINHAND
+     *   nbt:
+     *     placeholder: true
+     *     PublicBukkitValues:
+     *       minecraft:drop_id: stone1-coin
+     *
+     * Bukkit may keep nested YAML sections as ConfigurationSection objects.
+     * ItemDataModel expects normal Map<String, Object> and List<Object> values.
+     */
+    private static Map<String, Object> toPlainMap(ConfigurationSection section) {
+        Map<String, Object> map = new LinkedHashMap<>();
+
+        if (section == null) {
+            return map;
+        }
+
+        for (String key : section.getKeys(false)) {
+            map.put(key, normalizeYamlValue(section.get(key)));
+        }
+
+        return map;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Object normalizeYamlValue(Object value) {
+        if (value instanceof ConfigurationSection childSection) {
+            return toPlainMap(childSection);
+        }
+
+        if (value instanceof Map<?, ?> rawMap) {
+            Map<String, Object> normalized = new LinkedHashMap<>();
+
+            for (Map.Entry<?, ?> entry : rawMap.entrySet()) {
+                if (entry.getKey() == null) continue;
+
+                String key = String.valueOf(entry.getKey());
+                normalized.put(key, normalizeYamlValue(entry.getValue()));
+            }
+
+            return normalized;
+        }
+
+        if (value instanceof List<?> rawList) {
+            List<Object> normalized = new ArrayList<>();
+
+            for (Object entry : rawList) {
+                normalized.add(normalizeYamlValue(entry));
+            }
+
+            return normalized;
+        }
+
+        return value;
     }
 }
