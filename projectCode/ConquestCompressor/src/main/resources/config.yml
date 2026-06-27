@@ -57,8 +57,7 @@ placeholders:
 # ===================================================
 cooldowns:
   command-delay-ms: 500                 # Delay between command executions
-  gui-action-cooldown-ms: 150           # Delay between GUI item clicks
-  compression-action-cooldown-ms: 3000  # Delay between compress/decompress actions
+  gui-action-cooldown-msd: 150           # Delay between GUI item clicks
   interaction-cooldown-ms: 750          # Delay between interaction actions
 
 # ===================================================
